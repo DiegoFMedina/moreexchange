@@ -119,6 +119,7 @@ export function GlobeBidirectionalSection() {
     }
 
     function arrowhead(fromX: number, fromY: number, toX: number, toY: number, color: string, sz = 7) {
+      if (!ctx) return;
       const ang = Math.atan2(toY - fromY, toX - fromX);
       ctx.save();
       ctx.translate(toX, toY);
@@ -137,6 +138,7 @@ export function GlobeBidirectionalSection() {
     }
 
     function diamond(px: number, py: number, ang: number, color: string, sz: number) {
+      if (!ctx) return;
       ctx.save();
       ctx.translate(px, py);
       ctx.rotate(ang);

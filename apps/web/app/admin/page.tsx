@@ -23,7 +23,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (rates && rates.length > 0 && !selectedRate) setSelectedRate(rates[0]);
-  }, [rates]);
+  }, [rates, selectedRate]);
 
   return (
     <div className="p-8">
