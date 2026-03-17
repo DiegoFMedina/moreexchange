@@ -2,7 +2,7 @@
 # DESC: Archivos excluidos del repositorio
 
 # Env
-.env
+
 .env.local
 .env.*.local
 
