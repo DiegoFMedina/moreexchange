@@ -156,6 +156,7 @@ export function GlobeBidirectionalSection() {
     }
 
     function drawGlobe() {
+      if (!ctx) return;
       ctx.clearRect(0, 0, W, H);
 
       const og = ctx.createRadialGradient(CX, CY, R * 0.8, CX, CY, R * 1.22);
