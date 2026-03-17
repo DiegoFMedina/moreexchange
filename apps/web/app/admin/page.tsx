@@ -3,7 +3,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { StatsCards } from '@/components/admin/StatsCards';
 import { RateHistoryChart } from '@/components/admin/RateHistoryChart';
@@ -19,10 +19,11 @@ export default function AdminDashboard() {
       const { data } = await api.get<ApiResponse<ExchangeRate[]>>('/rates');
       return data.data;
     },
-    onSuccess: (data: ExchangeRate[]) => {
-      if (data.length > 0 && !selectedRate) setSelectedRate(data[0]);
-    },
   });
+
+  useEffect(() => {
+    if (rates && rates.length > 0 && !selectedRate) setSelectedRate(rates[0]);
+  }, [rates]);
 
   return (
     <div className="p-8">
