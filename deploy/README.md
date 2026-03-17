@@ -13,13 +13,16 @@ chmod +x scripts/setup-nginx.sh
 Luego HTTPS (crear carpeta para el reto ACME y obtener certificado):
 
 ```bash
-sudo mkdir -p /var/www/certbot
-# Opción A: obtener cert y que Certbot configure Nginx
+./scripts/prepare-certbot.sh
 sudo certbot certonly --webroot -w /var/www/certbot -d tudominio.com -d www.tudominio.com
-sudo certbot --nginx   # añade SSL al sitio ya existente
-# Opción B: solo certbot --nginx (si el sitio ya tiene location /.well-known en la config)
-sudo certbot --nginx -d tudominio.com -d www.tudominio.com
+sudo certbot --nginx
 ```
+
+Si Certbot devuelve 500 en el reto ACME:
+- Comprueba que en el servidor está la config nueva: `grep acme-challenge /etc/nginx/sites-enabled/moreexchange`
+- Si no sale nada, haz `git pull` y vuelve a ejecutar `./scripts/setup-nginx.sh tudominio.com`
+- Revisa el log de Nginx: `sudo tail -30 /var/log/nginx/error.log`
+- Si existe sitio por defecto que pueda capturar el tráfico: `sudo rm /etc/nginx/sites-enabled/default` y `sudo nginx -t && sudo systemctl reload nginx`
 
 ## Deploy de la app (actualizar código)
 
