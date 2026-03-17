@@ -13,7 +13,7 @@ import type { ApiResponse, ExchangeRate } from '@/types';
 export default function AdminDashboard() {
   const [selectedRate, setSelectedRate] = useState<ExchangeRate | null>(null);
 
-  const { data: rates } = useQuery({
+  const { data: rates } = useQuery<ExchangeRate[]>({
     queryKey: ['admin', 'rates-select'],
     queryFn: async (): Promise<ExchangeRate[]> => {
       const { data } = await api.get<ApiResponse<ExchangeRate[]>>('/rates');
@@ -22,7 +22,7 @@ export default function AdminDashboard() {
     onSuccess: (data: ExchangeRate[]) => {
       if (data.length > 0 && !selectedRate) setSelectedRate(data[0]);
     },
-  } as Parameters<typeof useQuery>[0]);
+  });
 
   return (
     <div className="p-8">
