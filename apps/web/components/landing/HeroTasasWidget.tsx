@@ -57,28 +57,28 @@ export function HeroTasasWidget() {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-[14px] border border-white/[0.09] bg-[#0F1E45]">
+    <div className="relative overflow-hidden rounded-[14px] border border-white/[0.09] bg-[#0F1E45] max-w-full w-full">
       <div
         className="absolute top-0 left-0 right-0 h-0.5 z-10"
         style={{
           background: 'linear-gradient(90deg, transparent, #2458F5, #00C2FF, transparent)',
         }}
       />
-      <div className="flex items-center justify-between px-4 pt-4 pb-3">
-        <span className="text-[13px] font-medium text-white">Tasas de hoy</span>
+      <div className="flex items-center justify-between gap-2 px-3 sm:px-4 pt-4 pb-3">
+        <span className="text-[13px] font-medium text-white truncate">Tasas de hoy</span>
         <div className="flex items-center gap-1.5 text-[10px] text-[#00C2FF] uppercase tracking-wider shrink-0">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] animate-pulse-dot" />
           En vivo
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+      <div className="flex flex-wrap gap-1.5 px-3 sm:px-4 pb-3">
         {(['all', 'usd', 'eur', 'rem'] as const).map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
-            className={`py-1.5 px-3 rounded-full border text-[11px] font-sans transition-all ${
+            className={`py-1.5 px-2.5 sm:px-3 rounded-full border text-[10px] sm:text-[11px] font-sans transition-all ${
               filter === f
                 ? 'bg-[rgba(36,88,245,0.2)] border-[rgba(36,88,245,0.5)] text-white'
                 : 'border-white/[0.07] bg-transparent text-white/45 hover:border-white/20 hover:text-white'
@@ -89,9 +89,9 @@ export function HeroTasasWidget() {
         ))}
       </div>
 
-      <div className="overflow-x-auto -mx-1 px-1">
-        <div className="min-w-[280px]">
-          <div className="grid grid-cols-[minmax(0,1fr)_60px_60px_48px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2 border-t border-white/[0.07] border-b border-white/[0.07]">
+      <div className="overflow-x-auto overflow-y-hidden -mx-1 px-1 pr-2">
+        <div className="min-w-[260px]">
+          <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2 border-t border-white/[0.07] border-b border-white/[0.07]">
             <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium truncate">Par</div>
             <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Compra</div>
             <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Venta</div>
@@ -115,7 +115,7 @@ export function HeroTasasWidget() {
                   <Link
                     key={rate.id}
                     href="/exchange"
-                    className="grid grid-cols-[minmax(0,1fr)_60px_60px_48px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2.5 border-b border-white/[0.07] last:border-b-0 items-center hover:bg-[rgba(36,88,245,0.07)] transition-colors"
+                    className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2.5 border-b border-white/[0.07] last:border-b-0 items-center hover:bg-[rgba(36,88,245,0.07)] transition-colors"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="relative flex w-[30px] h-[18px] shrink-0">
@@ -153,7 +153,7 @@ export function HeroTasasWidget() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 px-4 py-3 border-t border-white/[0.07]">
+      <div className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 border-t border-white/[0.07]">
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-white/45">
             {dataUpdatedAt

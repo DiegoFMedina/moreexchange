@@ -37,9 +37,9 @@ export function Navbar() {
           : 'bg-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+        <Link href="/" className="flex items-center gap-3 group shrink-0 min-w-0">
           <div className="w-8 h-8 relative">
             <Image
               src="/toro.png"
@@ -67,8 +67,8 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* CTA — si hay sesión: Cerrar sesión + un botón (Panel admin o Cambiar ahora); si no: Iniciar sesión + Cambiar ahora */}
-        <div className="flex items-center gap-3">
+        {/* CTA — espacio a la derecha en móvil para no pegar al borde */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {currentUser ? (
             <>
               <button
@@ -81,7 +81,7 @@ export function Navbar() {
               </button>
               <Link
                 href={currentUser.role === 'ADMIN' ? '/admin' : '/exchange'}
-                className="px-4 py-2 text-[13px] font-sans font-medium border border-accent text-accent rounded-md hover:bg-accent hover:text-background transition-all duration-150"
+                className="py-2 px-3 sm:px-4 text-[12px] sm:text-[13px] font-sans font-medium border border-accent text-accent rounded-md hover:bg-accent hover:text-background transition-all duration-150 whitespace-nowrap"
               >
                 {currentUser.role === 'ADMIN' ? 'Panel admin' : 'Cambiar ahora'}
               </Link>
@@ -96,7 +96,7 @@ export function Navbar() {
               </Link>
               <Link
                 href="/exchange"
-                className="px-4 py-2 text-[13px] font-sans font-medium border border-accent text-accent rounded-md hover:bg-accent hover:text-background transition-all duration-150"
+                className="py-2 px-3 sm:px-4 text-[12px] sm:text-[13px] font-sans font-medium border border-accent text-accent rounded-md hover:bg-accent hover:text-background transition-all duration-150 whitespace-nowrap"
               >
                 Cambiar ahora
               </Link>
