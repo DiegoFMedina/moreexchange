@@ -1,0 +1,4 @@
+#!/bin/sh
+# PATH: .husky/pre-commit
+# DESC: Hook pre-commit — ejecuta lint-staged para lint y format antes de cada commit
+npx lint-staged

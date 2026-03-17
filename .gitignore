@@ -1,0 +1,40 @@
+# PATH: .gitignore
+# DESC: Archivos excluidos del repositorio
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Dependencias
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+.next/
+.turbo/
+*.tsbuildinfo
+
+# Logs
+*.log
+/var/log/
+
+# Prisma
+apps/api/src/prisma/migrations/
+
+# Coverage
+coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PM2
+.pm2/

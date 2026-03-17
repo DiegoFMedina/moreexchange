@@ -1,0 +1,110 @@
+// PATH: apps/api/src/prisma/schema.prisma
+// DESC: Schema Prisma completo con todos los modelos de la plataforma de cambio de divisas
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  password     String
+  role         Role          @default(CLIENT)
+  firstName    String
+  lastName     String
+  phone        String?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  apiKeys      ApiKey[]
+  rateChanges  RateHistory[]
+}
+
+enum Role {
+  ADMIN
+  CLIENT
+}
+
+model Currency {
+  id        String         @id @default(cuid())
+  code      String         @unique
+  name      String
+  symbol    String
+  flagEmoji String
+  decimals  Int            @default(2)
+  isActive  Boolean        @default(true)
+  ratesFrom ExchangeRate[] @relation("FromCurrency")
+  ratesTo   ExchangeRate[] @relation("ToCurrency")
+}
+
+model ExchangeRate {
+  id             String        @id @default(cuid())
+  fromCurrency   Currency      @relation("FromCurrency", fields: [fromCurrencyId], references: [id])
+  fromCurrencyId String
+  toCurrency     Currency      @relation("ToCurrency", fields: [toCurrencyId], references: [id])
+  toCurrencyId   String
+  buyRate        Decimal       @db.Decimal(18, 6)
+  sellRate       Decimal       @db.Decimal(18, 6)
+  spread         Decimal       @db.Decimal(5, 4)
+  isActive       Boolean       @default(true)
+  updatedAt      DateTime      @updatedAt
+  updatedById    String?
+  history        RateHistory[]
+
+  @@unique([fromCurrencyId, toCurrencyId])
+}
+
+model RateHistory {
+  id             String       @id @default(cuid())
+  exchangeRate   ExchangeRate @relation(fields: [exchangeRateId], references: [id])
+  exchangeRateId String
+  buyRate        Decimal      @db.Decimal(18, 6)
+  sellRate       Decimal      @db.Decimal(18, 6)
+  changedAt      DateTime     @default(now())
+  changedBy      User?        @relation(fields: [changedById], references: [id])
+  changedById    String?
+}
+
+model Transaction {
+  id              String            @id @default(cuid())
+  user            User              @relation(fields: [userId], references: [id])
+  userId          String
+  fromCurrencyId  String
+  toCurrencyId    String
+  fromAmount      Decimal           @db.Decimal(18, 2)
+  toAmount        Decimal           @db.Decimal(18, 2)
+  rateApplied     Decimal           @db.Decimal(18, 6)
+  status          TransactionStatus @default(PENDING)
+  paymentMethod   String?
+  paymentIntentId String?           @unique
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+enum TransactionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+  keyHash    String    @unique
+  name       String
+  lastUsedAt DateTime?
+  expiresAt  DateTime?
+  isActive   Boolean   @default(true)
+  rateLimit  Int       @default(1000)
+  createdAt  DateTime  @default(now())
+}

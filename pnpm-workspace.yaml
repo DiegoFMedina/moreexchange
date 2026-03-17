@@ -1,0 +1,4 @@
+# PATH: pnpm-workspace.yaml
+# DESC: Define los workspaces del monorepo — pnpm resuelve dependencias entre apps automáticamente
+packages:
+  - "apps/*"
