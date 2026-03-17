@@ -26,10 +26,21 @@ Si Certbot devuelve 500 en el reto ACME:
 
 ## Deploy de la app (actualizar código)
 
-Usa el script existente (ajusta `APP_DIR` si no es `/var/www/cambios`):
+**Primera vez (o si no hay build):** desde la raíz del repo en el servidor:
 
 ```bash
-APP_DIR=/var/www/moreexchange ./scripts/deploy.sh
+cd /srv/moreexchange
+pnpm install
+pnpm run build
+pm2 delete cambios-web cambios-api 2>/dev/null
+pm2 start ecosystem.config.js
+pm2 save
 ```
 
-Requiere PM2 y `ecosystem.config.js` con los procesos web y api ya configurados.
+**Siguientes despliegues** (código ya actualizado con git pull):
+
+```bash
+APP_DIR=/srv/moreexchange ./scripts/deploy.sh
+```
+
+Requiere PM2 y que existan `apps/api/dist/main.js` y `apps/web/.next` (es decir, `pnpm run build` ejecutado al menos una vez).

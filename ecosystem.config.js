@@ -7,8 +7,8 @@ module.exports = {
   apps: [
     {
       name: 'cambios-web',
-      script: 'node_modules/.bin/next',
-      args: 'start',
+      script: 'pnpm',
+      args: 'run start',
       cwd: './apps/web',
       instances: 2,
       exec_mode: 'cluster',
