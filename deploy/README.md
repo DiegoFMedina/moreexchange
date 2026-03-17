@@ -10,9 +10,14 @@ chmod +x scripts/setup-nginx.sh
 ./scripts/setup-nginx.sh tudominio.com
 ```
 
-Luego HTTPS:
+Luego HTTPS (crear carpeta para el reto ACME y obtener certificado):
 
 ```bash
+sudo mkdir -p /var/www/certbot
+# Opción A: obtener cert y que Certbot configure Nginx
+sudo certbot certonly --webroot -w /var/www/certbot -d tudominio.com -d www.tudominio.com
+sudo certbot --nginx   # añade SSL al sitio ya existente
+# Opción B: solo certbot --nginx (si el sitio ya tiene location /.well-known en la config)
 sudo certbot --nginx -d tudominio.com -d www.tudominio.com
 ```
 
