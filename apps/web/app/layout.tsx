@@ -49,6 +49,8 @@ export const viewport: Viewport = {
   themeColor: '#06080f',
   width: 'device-width',
   initialScale: 1,
+  // Evita que el navegador calcule un viewport más ancho que la pantalla
+  maximumScale: 5,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

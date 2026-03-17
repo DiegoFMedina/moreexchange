@@ -41,7 +41,7 @@ export function FloatingButtons() {
       <div className="relative flex flex-col items-end" ref={langWrapRef}>
         <div
           className={[
-            'absolute bottom-[62px] right-0 min-w-[195px] rounded-[14px] border border-white/10 bg-[rgba(11,20,56,0.98)] px-2 py-2 shadow-xl backdrop-blur-[12px]',
+            'absolute bottom-[62px] right-0 min-w-[195px] rounded-[14px] border border-white/10 bg-[rgba(11,20,56,1)] px-2 py-2 shadow-xl',
             'flex flex-col gap-0.5 transition-all duration-[220ms] ease-out',
             langOpen
               ? 'pointer-events-auto translate-y-0 scale-100 opacity-100'

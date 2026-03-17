@@ -158,7 +158,8 @@ export function HeroSection() {
         </div>
 
         {/* Barra de stats — en móvil lista vertical (1 col); desde sm una fila horizontal */}
-        <div className="relative z-10 border-t border-white/[0.07] grid grid-cols-1 sm:flex sm:flex-wrap lg:flex-nowrap py-3 sm:py-[22px] px-4 sm:px-6 lg:px-10 bg-[rgba(17,32,80,0.55)] backdrop-blur-[10px]">
+        {/* Sin backdrop-blur: genera compositing layer que se extiende fuera del viewport en Android */}
+        <div className="relative z-10 border-t border-white/[0.07] grid grid-cols-1 sm:flex sm:flex-wrap lg:flex-nowrap py-3 sm:py-[22px] px-4 sm:px-6 lg:px-10 bg-[rgba(10,21,48,0.92)]">
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
