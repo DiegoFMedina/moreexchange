@@ -62,6 +62,10 @@ export function GlobeBidirectionalSection() {
   useLayoutEffect(() => {
     const scene = sceneRef.current;
     if (!scene) return;
+    const sceneW = scene.offsetWidth || 500;
+    const sceneH = scene.offsetHeight || 500;
+    const scaleX = sceneW / W;
+    const scaleY = sceneH / H;
     PINS.forEach((pin, i) => {
       const el = pinRefs.current[i];
       if (!el) return;
@@ -70,13 +74,17 @@ export function GlobeBidirectionalSection() {
       if (!pill || !stem) return;
       const anc = pinAnchorPos(pin.ang);
       const lbl = pinLabelPos(pin.ang, pin.r);
+      const ax = anc.x * scaleX;
+      const ay = anc.y * scaleY;
+      const lx = lbl.x * scaleX;
+      const ly = lbl.y * scaleY;
       const pw = pill.offsetWidth || 130;
       const ph = pill.offsetHeight || 28;
-      const dist = Math.sqrt((lbl.x - anc.x) ** 2 + (lbl.y - anc.y) ** 2);
+      const dist = Math.sqrt((lx - ax) ** 2 + (ly - ay) ** 2);
       const stemH = Math.max(10, dist - ph / 2 - 4);
       stem.style.height = `${stemH}px`;
-      el.style.left = `${anc.x - pw / 2}px`;
-      el.style.top = `${anc.y - stemH - ph - 5}px`;
+      el.style.left = `${ax - pw / 2}px`;
+      el.style.top = `${ay - stemH - ph - 5}px`;
     });
   }, []);
 
@@ -317,8 +325,8 @@ export function GlobeBidirectionalSection() {
   }, [streams]);
 
   return (
-    <section className="py-[72px] px-6 md:px-10 bg-[#08122B] font-sans text-white">
-      <div className="flex flex-col items-center max-w-4xl mx-auto">
+    <section className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#08122B] font-sans text-white overflow-x-hidden w-full min-w-0">
+      <div className="flex flex-col items-center max-w-4xl mx-auto w-full min-w-0">
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.05 }}
@@ -346,7 +354,7 @@ export function GlobeBidirectionalSection() {
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.3 }}
           ref={sceneRef}
-          className="relative w-[min(500px,100%)] h-[min(500px,100vw)] min-h-[320px]"
+          className="relative w-[min(500px,100%)] max-w-full h-[min(500px,80vmin)] min-h-[280px] overflow-hidden"
         >
           <canvas
             ref={canvasRef}
@@ -401,11 +409,11 @@ export function GlobeBidirectionalSection() {
           ))}
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats — en móvil una columna para no forzar ancho */}
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.4 }}
-          className="flex flex-wrap gap-4 justify-center mt-6"
+          className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-6 w-full max-w-full px-0"
         >
           {[
             { val: <><span className="text-[#00C2FF]">40</span>+</>, lbl: 'Países' },
