@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import api from '@/lib/api';
 import { formatRate } from '@/lib/utils';
-import type { ApiResponse, ExchangeRate, PaginatedResponse } from '@/types';
+import type { ApiResponse, ExchangeRate } from '@/types';
 import { RATES_KEY } from '@/hooks/useRates';
 
 function EditableCell({
@@ -100,7 +100,7 @@ export function RatesManager() {
       <table className="w-full border-collapse text-left">
         <thead>
           <tr className="border-b border-gray-200">
-            {['Par', 'Compra', 'Venta', 'Spread', 'Estado', 'Actualizado'].map((col, i) => (
+            {['Par', 'Compra', 'Venta', 'Spread', 'Estado', 'Actualizado'].map((col) => (
               <th
                 key={col}
                 className="py-2.5 px-4 text-[11px] uppercase tracking-widest text-gray-400 font-sans"

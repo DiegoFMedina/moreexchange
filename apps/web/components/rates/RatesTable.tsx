@@ -3,8 +3,7 @@
 
 'use client';
 
-import { useRef } from 'react';
-import { motion, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useRates } from '@/hooks/useRates';
 import { formatRate } from '@/lib/utils';
 import type { ExchangeRate } from '@/types';

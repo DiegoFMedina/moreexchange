@@ -5,7 +5,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { SUC_MAP, TOT_MAP, type SucursalMap, type TotemMap } from '@/lib/sucursales-page-data';
+import { SUC_MAP, TOT_MAP } from '@/lib/sucursales-page-data';
 import { SucursalesMapSvg } from '@/components/sucursales/SucursalesMapSvg';
 
 type Filter = 'all' | 'suc' | 'tot' | '24h';
@@ -153,7 +153,7 @@ export default function SucursalesPage() {
                 <span className="w-2 h-2 rounded-full bg-[#00C2FF]" />
                 Sucursales con atención · {filteredSuc.length}
               </div>
-              {filteredSuc.map((d, i) => {
+              {filteredSuc.map((d) => {
                 const idx = SUC_MAP.indexOf(d);
                 const isActive = activeType === 'suc' && activeIdx === idx;
                 return (
@@ -196,7 +196,7 @@ export default function SucursalesPage() {
                 <span className="w-2 h-2 rounded-full bg-[#00E5A0]" />
                 Tótems autoservicio · {filteredTot.length}
               </div>
-              {filteredTot.map((d, i) => {
+              {filteredTot.map((d) => {
                 const idx = TOT_MAP.indexOf(d);
                 const isActive = activeType === 'tot' && activeIdx === idx;
                 return (

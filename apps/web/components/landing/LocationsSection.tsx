@@ -402,7 +402,7 @@ export function LocationsSection() {
           key={`${tab}-${tab === 'suc' ? sucFilter : totFilter}`}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
         >
-          {list.map((item, i) => (
+          {list.map((item) => (
             <div
               key={item.name}
               role="button"

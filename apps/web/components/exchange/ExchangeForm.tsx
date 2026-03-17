@@ -8,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRates } from '@/hooks/useRates';
 import { useCreateOrder } from '@/hooks/useExchange';
-import { formatCurrency, formatRate } from '@/lib/utils';
 
 const schema = z.object({
   fromCurrencyId: z.string().min(1, 'Selecciona divisa de origen'),

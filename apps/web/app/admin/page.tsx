@@ -19,7 +19,7 @@ export default function AdminDashboard() {
       const { data } = await api.get<ApiResponse<ExchangeRate[]>>('/rates');
       return data.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: ExchangeRate[]) => {
       if (data.length > 0 && !selectedRate) setSelectedRate(data[0]);
     },
   } as Parameters<typeof useQuery>[0]);
