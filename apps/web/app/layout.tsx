@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es" className={`${syne.variable} ${dmSans.variable}`} suppressHydrationWarning>
       <body className="min-h-screen min-w-0 max-w-[100vw] bg-background text-text-primary antialiased">
-        <div className="min-h-screen w-full min-w-0 max-w-full overflow-x-hidden">
+        <div className="min-h-screen w-full min-w-0 max-w-full [overflow-x:clip]">
           <Providers>{children}</Providers>
         </div>
       </body>

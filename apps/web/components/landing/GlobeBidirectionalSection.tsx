@@ -3,7 +3,7 @@
 
 'use client';
 
-import { useEffect, useRef, useLayoutEffect, useMemo } from 'react';
+import { useEffect, useRef, useLayoutEffect, useMemo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 const W = 500;
@@ -59,11 +59,13 @@ export function GlobeBidirectionalSection() {
     });
   }, []);
 
-  useLayoutEffect(() => {
+  const positionPins = useCallback(() => {
     const scene = sceneRef.current;
     if (!scene) return;
-    const sceneW = scene.offsetWidth || 500;
-    const sceneH = scene.offsetHeight || 500;
+    const sceneW = scene.offsetWidth;
+    const sceneH = scene.offsetHeight;
+    // Si el contenedor aún no tiene dimensiones, no posicionar (evita overflow con fallback 500)
+    if (!sceneW || !sceneH) return;
     const scaleX = sceneW / W;
     const scaleY = sceneH / H;
     PINS.forEach((pin, i) => {
@@ -78,15 +80,31 @@ export function GlobeBidirectionalSection() {
       const ay = anc.y * scaleY;
       const lx = lbl.x * scaleX;
       const ly = lbl.y * scaleY;
-      const pw = pill.offsetWidth || 130;
-      const ph = pill.offsetHeight || 28;
+      const pw = pill.offsetWidth || 80;
+      const ph = pill.offsetHeight || 24;
       const dist = Math.sqrt((lx - ax) ** 2 + (ly - ay) ** 2);
       const stemH = Math.max(10, dist - ph / 2 - 4);
       stem.style.height = `${stemH}px`;
-      el.style.left = `${ax - pw / 2}px`;
+      // Clamp left so pins never exceed container width
+      const leftRaw = ax - pw / 2;
+      const leftClamped = Math.max(0, Math.min(leftRaw, sceneW - pw));
+      el.style.left = `${leftClamped}px`;
       el.style.top = `${ay - stemH - ph - 5}px`;
     });
   }, []);
+
+  useLayoutEffect(() => {
+    positionPins();
+  }, [positionPins]);
+
+  // Re-posicionar si el contenedor cambia de tamaño (orientación o resize)
+  useEffect(() => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+    const ro = new ResizeObserver(() => positionPins());
+    ro.observe(scene);
+    return () => ro.disconnect();
+  }, [positionPins]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

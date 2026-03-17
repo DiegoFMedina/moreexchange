@@ -36,7 +36,7 @@ function CheckIcon() {
 export function HeroSection() {
   return (
     <div
-      className="font-sans text-white w-full min-w-0 overflow-x-hidden"
+      className="font-sans text-white w-full min-w-0 [overflow-x:clip]"
       style={{
         background:
           'radial-gradient(ellipse 80% 55% at 62% 0%, rgba(36,88,245,0.2) 0%, transparent 60%), radial-gradient(ellipse 40% 35% at 8% 85%, rgba(0,194,255,0.08) 0%, transparent 55%), #0A1530',
