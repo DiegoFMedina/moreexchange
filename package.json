@@ -25,6 +25,9 @@
     "db:studio": "pnpm --filter @moreexchange/api db:studio",
     "prepare": "husky"
   },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
