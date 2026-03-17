@@ -19,7 +19,7 @@ const WA_URL =
 
 export function FloatingButtons() {
   const [langOpen, setLangOpen] = useState(false);
-  const [activeLang, setActiveLang] = useState<(typeof LANGUAGES)[0]>(LANGUAGES[0]);
+  const [activeLang, setActiveLang] = useState<(typeof LANGUAGES)[number]>(LANGUAGES[0]);
   const langWrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
