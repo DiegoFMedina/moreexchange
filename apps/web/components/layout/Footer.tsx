@@ -27,17 +27,17 @@ const LEGAL_LINKS = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#0F1E45] border-t border-white/[0.06] pt-14 pb-0 px-6 md:px-10 font-sans text-white">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-10 pb-12 border-b border-white/[0.06]">
-          <div className="md:col-span-2">
-            <div className="font-display font-extrabold text-[20px] tracking-wider text-white mb-3.5">
+    <footer className="bg-[#0F1E45] border-t border-white/[0.06] pt-10 sm:pt-14 pb-0 px-4 sm:px-6 md:px-10 font-sans text-white overflow-x-hidden">
+      <div className="max-w-6xl mx-auto min-w-0">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 sm:gap-8 md:gap-10 pb-10 sm:pb-12 border-b border-white/[0.06]">
+          <div className="md:col-span-2 min-w-0">
+            <div className="font-display font-extrabold text-[18px] sm:text-[20px] tracking-wider text-white mb-3.5">
               MORE<span className="text-[#00C2FF]">EXCHANGE</span>
             </div>
-            <p className="text-[13px] text-white/60 leading-relaxed max-w-[220px] mb-4">
+            <p className="text-[12px] sm:text-[13px] text-white/60 leading-relaxed max-w-[220px] mb-4">
               Plataforma profesional de cambio de divisas y remesas internacionales. Rápido, seguro y transparente.
             </p>
-            <div className="inline-flex items-start gap-2 bg-[rgba(0,194,255,0.07)] border border-[rgba(0,194,255,0.25)] text-white/70 py-1.5 px-3 rounded-md text-[11px] leading-snug">
+            <div className="inline-flex items-start gap-2 bg-[rgba(0,194,255,0.07)] border border-[rgba(0,194,255,0.25)] text-white/70 py-1.5 px-3 rounded-md text-[10px] sm:text-[11px] leading-snug max-w-full">
               <svg className="w-3 h-3 flex-shrink-0 mt-0.5 stroke-[#00C2FF]" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M6 1L1 3.5v3c0 2.8 2 4.8 5 5.5 3-.7 5-2.7 5-5.5v-3L6 1z" />
               </svg>
@@ -48,14 +48,14 @@ export function Footer() {
             </div>
           </div>
 
-          <div>
-            <h5 className="text-[11px] tracking-[0.12em] uppercase text-white/60 mb-4 font-medium">
+          <div className="min-w-0">
+            <h5 className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-white/60 mb-4 font-medium">
               Producto
             </h5>
             <ul className="space-y-3 list-none p-0 m-0">
               {PRODUCTO_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-[13px] text-white/70 no-underline hover:text-white transition-colors">
+                  <Link href={link.href} className="text-[12px] sm:text-[13px] text-white/70 no-underline hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -63,14 +63,14 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h5 className="text-[11px] tracking-[0.12em] uppercase text-white/60 mb-4 font-medium">
+          <div className="min-w-0">
+            <h5 className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-white/60 mb-4 font-medium">
               Sucursales
             </h5>
             <ul className="space-y-3 list-none p-0 m-0">
               {SUCURSALES_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-[13px] text-white/70 no-underline hover:text-white transition-colors">
+                  <Link href={link.href} className="text-[12px] sm:text-[13px] text-white/70 no-underline hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -78,14 +78,14 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h5 className="text-[11px] tracking-[0.12em] uppercase text-white/60 mb-4 font-medium">
+          <div className="min-w-0">
+            <h5 className="text-[10px] sm:text-[11px] tracking-[0.12em] uppercase text-white/60 mb-4 font-medium">
               Legal
             </h5>
             <ul className="space-y-3 list-none p-0 m-0">
               {LEGAL_LINKS.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-[13px] text-white/70 no-underline hover:text-white transition-colors">
+                  <Link href={link.href} className="text-[12px] sm:text-[13px] text-white/70 no-underline hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -94,11 +94,11 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-5">
-          <p className="text-[12px] text-white/60">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-5 text-center sm:text-left">
+          <p className="text-[11px] sm:text-[12px] text-white/60">
             © {new Date().getFullYear()} More Exchange. Todos los derechos reservados.
           </p>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap justify-center sm:justify-end gap-3 sm:gap-4">
             <a href="https://twitter.com/more_exchange" target="_blank" rel="noopener noreferrer" className="text-[12px] text-white/60 no-underline hover:text-[#00C2FF] transition-colors">
               Twitter
             </a>

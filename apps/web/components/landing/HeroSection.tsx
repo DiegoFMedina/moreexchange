@@ -62,10 +62,10 @@ export function HeroSection() {
           />
         </div>
 
-        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-0 px-6 lg:px-10 pt-24 lg:pt-28 pb-0 lg:items-start max-w-[1400px] mx-auto">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-0 px-4 sm:px-6 lg:px-10 pt-20 sm:pt-24 lg:pt-28 pb-0 lg:items-start max-w-[1400px] mx-auto">
           {/* Columna izquierda */}
-          <div className="pr-0 lg:pr-10 pb-12 lg:pb-[52px]">
-            <div className="max-w-xl">
+          <div className="pr-0 lg:pr-10 pb-8 sm:pb-12 lg:pb-[52px]">
+            <div className="max-w-xl min-w-0">
               {/* Tag pill — d1 */}
               <motion.div
                 initial={{ opacity: 0, y: 28 }}
@@ -100,7 +100,7 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[2] }}
-                className="text-[15px] leading-[1.7] text-white/45 max-w-[400px] mb-8 font-light"
+                className="text-[14px] sm:text-[15px] leading-[1.7] text-white/45 max-w-[400px] mb-6 sm:mb-8 font-light"
               >
                 USD, EUR, GBP, BRL y más — directo a tu cuenta o a quien más quieres. Tasas competitivas, proceso en minutos.
               </motion.p>
@@ -112,13 +112,13 @@ export function HeroSection() {
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[3] }}
                 className="mb-8"
               >
-                <div className="inline-flex rounded-lg bg-[#0F1E45] border border-[rgba(255,255,255,0.07)] p-1 gap-0">
-                  <span className="px-5 py-2 rounded-md bg-[#2458F5] text-white text-[13px] font-medium">
+                <div className="inline-flex rounded-lg bg-[#0F1E45] border border-[rgba(255,255,255,0.07)] p-1 gap-0 max-w-full">
+                  <span className="px-3 sm:px-5 py-2 rounded-md bg-[#2458F5] text-white text-[12px] sm:text-[13px] font-medium whitespace-nowrap">
                     Cambio de divisas
                   </span>
                   <Link
                     href="/exchange"
-                    className="px-5 py-2 rounded-md text-[13px] text-white/45 hover:text-white transition-colors"
+                    className="px-3 sm:px-5 py-2 rounded-md text-[12px] sm:text-[13px] text-white/45 hover:text-white transition-colors whitespace-nowrap"
                   >
                     Remesas
                   </Link>
@@ -130,10 +130,10 @@ export function HeroSection() {
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[4] }}
-                className="flex flex-wrap gap-5"
+                className="flex flex-wrap gap-x-4 gap-y-3 sm:gap-5"
               >
                 {TRUST_ITEMS.map((label) => (
-                  <div key={label} className="flex items-center gap-1.5 text-[12px] text-white/45">
+                  <div key={label} className="flex items-center gap-1.5 text-[11px] sm:text-[12px] text-white/45">
                     <span className="w-4 h-4 rounded-full border border-[rgba(36,88,245,0.35)] flex items-center justify-center shrink-0 text-[#00C2FF]">
                       <CheckIcon />
                     </span>
@@ -146,7 +146,7 @@ export function HeroSection() {
 
           {/* Widget Tasas de hoy — reveal d3 + float */}
           <motion.div
-            className="w-full lg:max-w-[360px]"
+            className="w-full min-w-0 lg:max-w-[360px]"
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[2] }}
