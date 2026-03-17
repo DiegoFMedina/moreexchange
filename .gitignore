@@ -20,8 +20,8 @@ dist/
 *.log
 /var/log/
 
-# Prisma
-apps/api/src/prisma/migrations/
+# Prisma (las migraciones SÍ deben versionarse para que deploy aplique tablas)
+# apps/api/src/prisma/migrations/ — quitado: deben estar en el repo
 
 # Coverage
 coverage/
