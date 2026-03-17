@@ -66,19 +66,19 @@ export function HeroTasasWidget() {
       />
       <div className="flex items-center justify-between px-4 pt-4 pb-3">
         <span className="text-[13px] font-medium text-white">Tasas de hoy</span>
-        <div className="flex items-center gap-1.5 text-[10px] text-[#00C2FF] uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 text-[10px] text-[#00C2FF] uppercase tracking-wider shrink-0">
           <span className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] animate-pulse-dot" />
           En vivo
         </div>
       </div>
 
-      <div className="flex gap-0 px-4 pb-3">
+      <div className="flex flex-wrap gap-1.5 px-4 pb-3">
         {(['all', 'usd', 'eur', 'rem'] as const).map((f) => (
           <button
             key={f}
             type="button"
             onClick={() => setFilter(f)}
-            className={`py-1.5 px-3.5 rounded-full border text-[11px] font-sans transition-all mr-1.5 ${
+            className={`py-1.5 px-3 rounded-full border text-[11px] font-sans transition-all ${
               filter === f
                 ? 'bg-[rgba(36,88,245,0.2)] border-[rgba(36,88,245,0.5)] text-white'
                 : 'border-white/[0.07] bg-transparent text-white/45 hover:border-white/20 hover:text-white'
@@ -89,67 +89,71 @@ export function HeroTasasWidget() {
         ))}
       </div>
 
-      <div className="grid grid-cols-[1fr_72px_72px_64px] gap-0 px-4 py-2 border-t border-white/[0.07] border-b border-white/[0.07]">
-        <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium">Par</div>
-        <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Compra</div>
-        <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Venta</div>
-        <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">%</div>
-      </div>
+      <div className="overflow-x-auto -mx-1 px-1">
+        <div className="min-w-[280px]">
+          <div className="grid grid-cols-[minmax(0,1fr)_60px_60px_48px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2 border-t border-white/[0.07] border-b border-white/[0.07]">
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium truncate">Par</div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Compra</div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Venta</div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">%</div>
+          </div>
 
-      <div className="min-h-[120px]">
-        {isLoading && (
-          <div className="py-8 text-center text-[12px] text-white/45">Cargando tasas...</div>
-        )}
-        {!isLoading && visible.length === 0 && (
-          <div className="py-8 text-center text-[12px] text-white/45">Sin tasas disponibles</div>
-        )}
-        {!isLoading &&
-          visible.length > 0 &&
-          visible.map((rate) => {
-            const spreadNum = Number(rate.spread);
-            const spreadPct = Number.isFinite(spreadNum) ? spreadNum * 100 : 0;
-            const isDown = spreadPct >= 2;
-            return (
-              <Link
-                key={rate.id}
-                href="/exchange"
-                className="grid grid-cols-[1fr_72px_72px_64px] gap-0 px-4 py-2.5 border-b border-white/[0.07] last:border-b-0 items-center hover:bg-[rgba(36,88,245,0.07)] transition-colors"
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="relative flex w-[30px] h-[18px] shrink-0">
-                    <span className="absolute left-0 w-[18px] h-[18px] rounded-full flex items-center justify-center text-[11px] bg-[#162254] border border-white/[0.08]">
-                      {rate.fromCurrency.flagEmoji}
-                    </span>
-                    <span className="absolute left-[11px] top-[2px] w-[14px] h-[14px] rounded-full flex items-center justify-center text-[8px] bg-[#162254] border border-white/[0.08]">
-                      {rate.toCurrency.flagEmoji}
-                    </span>
-                  </div>
-                  <span className="text-[13px] font-medium text-white truncate">
-                    {rate.fromCurrency.code}/{rate.toCurrency.code}
-                  </span>
-                </div>
-                <div className="font-mono text-[13px] text-white text-right tabular-nums">
-                  {fmtN(Number(rate.buyRate))}
-                </div>
-                <div className="font-mono text-[13px] font-medium text-white text-right tabular-nums">
-                  {fmtN(Number(rate.sellRate))}
-                </div>
-                <div className="text-right">
-                  <span
-                    className={`inline-flex items-center gap-0.5 py-0.5 px-1.5 rounded-lg text-[10px] font-mono font-medium ${
-                      isDown ? 'bg-[rgba(255,92,92,0.1)] text-[#FF5C5C]' : 'bg-[rgba(0,229,160,0.1)] text-[#00E5A0]'
-                    }`}
+          <div className="min-h-[120px]">
+            {isLoading && (
+              <div className="py-8 text-center text-[12px] text-white/45">Cargando tasas...</div>
+            )}
+            {!isLoading && visible.length === 0 && (
+              <div className="py-8 text-center text-[12px] text-white/45">Sin tasas disponibles</div>
+            )}
+            {!isLoading &&
+              visible.length > 0 &&
+              visible.map((rate) => {
+                const spreadNum = Number(rate.spread);
+                const spreadPct = Number.isFinite(spreadNum) ? spreadNum * 100 : 0;
+                const isDown = spreadPct >= 2;
+                return (
+                  <Link
+                    key={rate.id}
+                    href="/exchange"
+                    className="grid grid-cols-[minmax(0,1fr)_60px_60px_48px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2.5 border-b border-white/[0.07] last:border-b-0 items-center hover:bg-[rgba(36,88,245,0.07)] transition-colors"
                   >
-                    {isDown ? '▼' : '▲'}
-                    {Number.isFinite(spreadNum) ? spreadPct.toFixed(2) : '—'}%
-                  </span>
-                </div>
-              </Link>
-            );
-          })}
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="relative flex w-[30px] h-[18px] shrink-0">
+                        <span className="absolute left-0 w-[18px] h-[18px] rounded-full flex items-center justify-center text-[11px] bg-[#162254] border border-white/[0.08]">
+                          {rate.fromCurrency.flagEmoji}
+                        </span>
+                        <span className="absolute left-[11px] top-[2px] w-[14px] h-[14px] rounded-full flex items-center justify-center text-[8px] bg-[#162254] border border-white/[0.08]">
+                          {rate.toCurrency.flagEmoji}
+                        </span>
+                      </div>
+                      <span className="text-[12px] sm:text-[13px] font-medium text-white truncate">
+                        {rate.fromCurrency.code}/{rate.toCurrency.code}
+                      </span>
+                    </div>
+                    <div className="font-mono text-[12px] sm:text-[13px] text-white text-right tabular-nums truncate">
+                      {fmtN(Number(rate.buyRate))}
+                    </div>
+                    <div className="font-mono text-[12px] sm:text-[13px] font-medium text-white text-right tabular-nums truncate">
+                      {fmtN(Number(rate.sellRate))}
+                    </div>
+                    <div className="text-right">
+                      <span
+                        className={`inline-flex items-center gap-0.5 py-0.5 px-1.5 rounded-lg text-[10px] font-mono font-medium ${
+                          isDown ? 'bg-[rgba(255,92,92,0.1)] text-[#FF5C5C]' : 'bg-[rgba(0,229,160,0.1)] text-[#00E5A0]'
+                        }`}
+                      >
+                        {isDown ? '▼' : '▲'}
+                        {Number.isFinite(spreadNum) ? spreadPct.toFixed(2) : '—'}%
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+          </div>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between px-4 py-3 border-t border-white/[0.07]">
+      <div className="flex items-center justify-between gap-2 px-4 py-3 border-t border-white/[0.07]">
         <div className="flex items-center gap-2">
           <span className="text-[10px] text-white/45">
             {dataUpdatedAt
@@ -169,7 +173,7 @@ export function HeroTasasWidget() {
         </div>
         <Link
           href="/rates"
-          className="bg-[#2458F5] text-white py-2 px-3.5 rounded-md text-[11px] font-medium hover:bg-[#1A3FBF] transition-colors whitespace-nowrap"
+          className="bg-[#2458F5] text-white py-2 px-3.5 rounded-md text-[11px] font-medium hover:bg-[#1A3FBF] transition-colors whitespace-nowrap shrink-0"
         >
           Ver todas →
         </Link>

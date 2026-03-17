@@ -79,12 +79,12 @@ export function HeroSection() {
                 </span>
               </motion.div>
 
-              {/* H1 — d2 */}
+              {/* H1 — d2 (móvil más pequeño para que no desborde) */}
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[1] }}
-                className="font-display text-[56px] lg:text-[56px] font-extrabold leading-[1.02] tracking-[-0.025em] mb-2"
+                className="font-display text-[36px] sm:text-[44px] lg:text-[56px] font-extrabold leading-[1.02] tracking-[-0.025em] mb-2"
               >
                 <span className="text-white/20">Cambia divisas</span>
                 <br />
@@ -157,22 +157,22 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Barra de stats — reveal con delays + vida visual (blur como moreexchange_final) */}
-        <div className="relative z-10 border-t border-white/[0.07] flex flex-wrap lg:flex-nowrap py-[22px] px-6 lg:px-10 bg-[rgba(17,32,80,0.55)] backdrop-blur-[10px]">
+        {/* Barra de stats — grid 2 cols móvil, flex desktop */}
+        <div className="relative z-10 border-t border-white/[0.07] grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap py-4 sm:py-[22px] px-4 sm:px-6 lg:px-10 bg-[rgba(17,32,80,0.55)] backdrop-blur-[10px] gap-px sm:gap-0">
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[i] ?? 0.5 }}
-              className="flex-1 min-w-[100px] px-4 lg:px-7 border-r border-white/[0.06] last:border-r-0 text-center"
+              className="flex-1 min-w-0 px-3 sm:px-4 lg:px-7 py-2 sm:py-0 border-r border-white/[0.06] last:border-r-0 even:border-r-0 sm:even:border-r text-center [&:nth-child(5)]:border-r-0"
             >
-              <p className="font-display text-[26px] font-bold text-white mb-0.5 tabular-nums">
+              <p className="font-display text-[20px] sm:text-[26px] font-bold text-white mb-0.5 tabular-nums leading-tight break-words">
                 {i === 0 && <span className="text-[#00C2FF]">+</span>}
-                {i === 2 && <span className="text-[14px] font-normal text-white/45"> </span>}
+                {i === 2 && <span className="text-[12px] sm:text-[14px] font-normal text-white/45"> </span>}
                 {stat.value}
               </p>
-              <p className="text-[12px] text-white/45">{stat.label}</p>
+              <p className="text-[11px] sm:text-[12px] text-white/45">{stat.label}</p>
             </motion.div>
           ))}
         </div>

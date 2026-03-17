@@ -283,7 +283,7 @@ export function LocationsSection() {
   const hoursFirst = (hours: string) => hours.split('·')[0].trim();
 
   return (
-    <section id="sucursales" className="py-[72px] px-6 md:px-10 bg-[#08122B] font-sans text-white">
+    <section id="sucursales" className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#08122B] font-sans text-white overflow-x-hidden">
       <div className="max-w-5xl mx-auto">
         <div className="text-center md:text-left flex flex-col items-center md:items-start">
           <motion.span
@@ -297,7 +297,7 @@ export function LocationsSection() {
           <motion.h2
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.15 }}
-            className="font-display text-[36px] font-extrabold tracking-tight text-white mb-2"
+            className="font-display text-[28px] sm:text-[36px] font-extrabold tracking-tight text-white mb-2"
           >
             Siempre <span className="text-[#00C2FF]">cerca de ti</span>
           </motion.h2>

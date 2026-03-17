@@ -49,8 +49,8 @@ function RateRow({ rate }: { rate: ExchangeRate }) {
 
   return (
     <tr className="border-b border-white/[0.06] last:border-b-0 hover:bg-[#0F1E45] transition-colors cursor-pointer">
-      <td className="py-4 px-5" style={{ width: 260 }}>
-        <div className="flex items-center gap-3">
+      <td className="py-3 px-3 sm:py-4 sm:px-5 min-w-[140px] sm:min-w-[200px] max-w-[260px]">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
           <div className="relative flex items-center w-9 h-6 flex-shrink-0">
             <span className="absolute left-0 w-6 h-6 rounded-full flex items-center justify-center text-[13px] bg-[#162254] border border-white/10">
               {rate.fromCurrency.flagEmoji}
@@ -59,21 +59,21 @@ function RateRow({ rate }: { rate: ExchangeRate }) {
               {rate.toCurrency.flagEmoji}
             </span>
           </div>
-          <div>
-            <div className="font-medium text-white text-[14px] tracking-wide">
+          <div className="min-w-0">
+            <div className="font-medium text-white text-[13px] sm:text-[14px] tracking-wide truncate">
               {rate.fromCurrency.code}/{rate.toCurrency.code}
             </div>
-            <div className="text-[11px] text-white/40 mt-0.5">{pairDescription(rate)}</div>
+            <div className="text-[10px] sm:text-[11px] text-white/40 mt-0.5 truncate">{pairDescription(rate)}</div>
           </div>
         </div>
       </td>
-      <td className="py-4 px-5 text-right font-mono text-[14px] text-white tabular-nums">
+      <td className="py-3 px-3 sm:py-4 sm:px-5 text-right font-mono text-[13px] sm:text-[14px] text-white tabular-nums whitespace-nowrap">
         {fmtN(Number(rate.buyRate))}
       </td>
-      <td className="py-4 px-5 text-right font-mono text-[15px] font-medium text-white tabular-nums">
+      <td className="py-3 px-3 sm:py-4 sm:px-5 text-right font-mono text-[14px] sm:text-[15px] font-medium text-white tabular-nums whitespace-nowrap">
         {fmtN(Number(rate.sellRate))}
       </td>
-      <td className="py-4 px-5 text-right">
+      <td className="py-3 px-3 sm:py-4 sm:px-5 text-right whitespace-nowrap">
         <span
           className={`inline-flex items-center gap-1 py-1 px-2.5 rounded-full text-[12px] font-mono font-medium ${
             isDown ? 'bg-[rgba(255,92,92,0.1)] text-[#FF5C5C]' : 'bg-[rgba(0,229,160,0.1)] text-[#00E5A0]'
@@ -83,10 +83,10 @@ function RateRow({ rate }: { rate: ExchangeRate }) {
           {Number.isFinite(spreadNum) ? spreadPct.toFixed(2) : '—'}%
         </span>
       </td>
-      <td className="py-4 px-5 text-right">
+      <td className="py-3 px-3 sm:py-4 sm:px-5 text-right">
         <Link
           href="/exchange"
-          className="inline-block border border-[#2458F5] text-[#00C2FF] py-1.5 px-3.5 rounded-md text-[12px] font-sans hover:bg-[#2458F5] hover:text-white transition-colors whitespace-nowrap"
+          className="inline-block border border-[#2458F5] text-[#00C2FF] py-1.5 px-3 rounded-md text-[11px] sm:text-[12px] font-sans hover:bg-[#2458F5] hover:text-white transition-colors whitespace-nowrap"
         >
           Cambiar →
         </Link>
@@ -122,7 +122,7 @@ export function LiveRatesSection() {
   };
 
   return (
-    <section className="bg-[#08122B] font-sans text-white py-16 px-6 lg:px-10">
+    <section className="bg-[#08122B] font-sans text-white py-12 sm:py-16 px-4 sm:px-6 lg:px-10 overflow-x-hidden">
       <div className="max-w-5xl mx-auto">
         {/* sec-top */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10">
@@ -184,28 +184,28 @@ export function LiveRatesSection() {
           ))}
         </motion.div>
 
-        {/* table */}
+        {/* table — scroll horizontal en móvil para no cortar columnas */}
         <motion.div
-          className="rounded-xl overflow-hidden border border-white/[0.06]"
+          className="rounded-xl overflow-hidden border border-white/[0.06] overflow-x-auto"
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.35 }}
         >
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse min-w-[520px]">
             <thead>
               <tr className="bg-[#0F1E45] border-b border-white/[0.06]">
-                <th className="py-3.5 px-5 text-left text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                <th className="py-3 px-3 sm:py-3.5 sm:px-5 text-left text-[10px] uppercase tracking-widest text-white/40 font-medium min-w-[140px] sm:min-w-[200px]">
                   Par
                 </th>
-                <th className="py-3.5 px-5 text-right text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                <th className="py-3 px-3 sm:py-3.5 sm:px-5 text-right text-[10px] uppercase tracking-widest text-white/40 font-medium whitespace-nowrap">
                   Compra
                 </th>
-                <th className="py-3.5 px-5 text-right text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                <th className="py-3 px-3 sm:py-3.5 sm:px-5 text-right text-[10px] uppercase tracking-widest text-white/40 font-medium whitespace-nowrap">
                   Venta
                 </th>
-                <th className="py-3.5 px-5 text-right text-[10px] uppercase tracking-widest text-white/40 font-medium">
+                <th className="py-3 px-3 sm:py-3.5 sm:px-5 text-right text-[10px] uppercase tracking-widest text-white/40 font-medium whitespace-nowrap">
                   Spread
                 </th>
-                <th className="py-3.5 px-5 text-right w-24" />
+                <th className="py-3 px-3 sm:py-3.5 sm:px-5 text-right w-20 sm:w-24" />
               </tr>
             </thead>
             <tbody>

@@ -16,7 +16,7 @@ export default function HomePage() {
     <>
       <ScrollToHash />
       <Navbar />
-      <main>
+      <main className="overflow-x-hidden">
         <HeroSection />
         <div className="h-px bg-white/[0.06]" aria-hidden />
         <GlobeBidirectionalSection />

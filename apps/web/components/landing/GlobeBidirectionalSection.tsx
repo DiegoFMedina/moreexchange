@@ -374,7 +374,7 @@ export function GlobeBidirectionalSection() {
             </div>
           </div>
 
-          {/* Flag pins */}
+          {/* Flag pins — en móvil solo bandera + código para evitar solapamientos */}
           {PINS.map((pin, i) => (
             <div
               key={pin.cur}
@@ -386,11 +386,11 @@ export function GlobeBidirectionalSection() {
             >
               <div
                 data-pill
-                className="bg-[#08122B]/95 border border-white/[0.18] rounded-[22px] py-1.5 pl-2 pr-3 flex items-center gap-1.5"
+                className="bg-[#08122B]/95 border border-white/[0.18] rounded-[22px] py-1 sm:py-1.5 pl-1.5 sm:pl-2 pr-2 sm:pr-3 flex items-center gap-1 sm:gap-1.5"
               >
-                <span className="text-[15px] leading-none">{pin.flag}</span>
-                <span className="text-[11px] font-medium text-white">{pin.name}</span>
-                <span className="text-[10px] text-[#00C2FF] font-mono">{pin.cur}</span>
+                <span className="text-[13px] sm:text-[15px] leading-none">{pin.flag}</span>
+                <span className="text-[10px] sm:text-[11px] font-medium text-white hidden sm:inline">{pin.name}</span>
+                <span className="text-[9px] sm:text-[10px] text-[#00C2FF] font-mono">{pin.cur}</span>
               </div>
               <div
                 data-stem

@@ -55,7 +55,7 @@ const FEATURES = [
 
 export function WhyUsSection() {
   return (
-    <section className="py-[72px] px-6 md:px-10 bg-[#0F1E45]">
+    <section className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#0F1E45] overflow-x-hidden">
       <div className="text-center flex flex-col items-center">
         <motion.span
           initial={{ opacity: 0, y: 28 }}
@@ -86,7 +86,7 @@ export function WhyUsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.12 }}
               transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: [0.05, 0.15, 0.25, 0.35][i] ?? 0.45 }}
-              className="bg-[#08122B] p-8 sm:p-9 hover:bg-[#162254] hover:-translate-y-0.5 transition-all duration-[250ms] group"
+              className="bg-[#08122B] p-6 sm:p-8 md:p-9 hover:bg-[#162254] hover:-translate-y-0.5 transition-all duration-[250ms] group min-w-0"
             >
               <div className="w-10 h-10 rounded-[10px] bg-[rgba(0,194,255,0.1)] border border-[rgba(0,194,255,0.25)] flex items-center justify-center mb-5 text-[#00C2FF] transition-transform duration-200 group-hover:scale-110">
                 {feature.icon}
