@@ -54,7 +54,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" className={`${syne.variable} ${dmSans.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen bg-background text-text-primary antialiased">
+      <body className="min-h-screen min-w-0 max-w-[100vw] bg-background text-text-primary antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

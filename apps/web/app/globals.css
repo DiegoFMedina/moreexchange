@@ -37,12 +37,18 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    width: 100%;
   }
 
   body {
     background-color: var(--background);
     color: var(--text-primary);
     font-family: var(--font-dm-sans), system-ui, sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
   }
 
   /* Números tabulares para cifras financieras */

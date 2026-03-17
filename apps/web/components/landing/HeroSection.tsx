@@ -36,14 +36,14 @@ function CheckIcon() {
 export function HeroSection() {
   return (
     <div
-      className="font-sans text-white"
+      className="font-sans text-white w-full min-w-0 overflow-x-hidden"
       style={{
         background:
           'radial-gradient(ellipse 80% 55% at 62% 0%, rgba(36,88,245,0.2) 0%, transparent 60%), radial-gradient(ellipse 40% 35% at 8% 85%, rgba(0,194,255,0.08) 0%, transparent 55%), #0A1530',
       }}
     >
-      {/* Hero grid: texto izquierda | card derecha. Sin overflow-hidden para que el toro pueda extenderse. */}
-      <section className="relative">
+      {/* Hero grid: texto izquierda | card derecha. overflow-x-hidden en el contenedor para evitar franja negra en móvil. */}
+      <section className="relative w-full min-w-0">
         <div className="absolute inset-0 z-0 dot-grid pointer-events-none opacity-[0.04]" aria-hidden />
         {/* Toro: fondo que cubre hero + barra de stats y se extiende un poco hacia abajo para evitar corte brusco */}
         <div
