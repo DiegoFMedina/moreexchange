@@ -17,7 +17,9 @@ import { Public } from '../../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import type { Request as ExpressRequest } from 'express';
 
-interface AuthReq { user: { id: string } }
+interface AuthReq {
+  user: { id: string };
+}
 
 @ApiTags('payments')
 @Controller('payments')
@@ -43,11 +45,7 @@ export class PaymentsController {
   @ApiOperation({ summary: 'Historial de pagos del usuario autenticado [JWT]' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  getHistory(
-    @Request() req: AuthReq,
-    @Query('page') page = 1,
-    @Query('limit') limit = 20,
-  ) {
+  getHistory(@Request() req: AuthReq, @Query('page') page = 1, @Query('limit') limit = 20) {
     return this.paymentsService.getPaymentHistory(req.user.id, +page, +limit);
   }
 }

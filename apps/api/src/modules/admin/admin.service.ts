@@ -134,10 +134,7 @@ export class AdminService {
       };
     }
     if (filters.currencyId) {
-      where.OR = [
-        { fromCurrencyId: filters.currencyId },
-        { toCurrencyId: filters.currencyId },
-      ];
+      where.OR = [{ fromCurrencyId: filters.currencyId }, { toCurrencyId: filters.currencyId }];
     }
 
     const [data, total] = await this.prisma.$transaction([

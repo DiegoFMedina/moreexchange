@@ -13,13 +13,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { Role } from '@prisma/client';
 import { RatesService } from './rates.service';
@@ -30,7 +24,9 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 
-interface AuthReq { user: { id: string } }
+interface AuthReq {
+  user: { id: string };
+}
 
 @ApiTags('rates')
 @Controller('rates')
@@ -89,11 +85,7 @@ export class RatesController {
   @ApiOperation({ summary: '[ADMIN] Historial de cambios paginado de una tasa' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  getHistory(
-    @Param('id') id: string,
-    @Query('page') page = 1,
-    @Query('limit') limit = 20,
-  ) {
+  getHistory(@Param('id') id: string, @Query('page') page = 1, @Query('limit') limit = 20) {
     return this.ratesService.getHistory(id, +page, +limit);
   }
 }

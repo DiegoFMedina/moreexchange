@@ -29,9 +29,7 @@ describe('GET /v1/rates (e2e)', () => {
   });
 
   it('devuelve 200 con formato { success: true, data: [...] }', async () => {
-    const response = await request(app.getHttpServer())
-      .get('/v1/rates')
-      .expect(200);
+    const response = await request(app.getHttpServer()).get('/v1/rates').expect(200);
 
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('data');

@@ -112,9 +112,9 @@ describe('AuthService', () => {
       prisma.user.findUnique.mockResolvedValue(MOCK_USER as any);
       jest.spyOn(bcrypt, 'compare').mockImplementation(async () => false);
 
-      await expect(
-        service.login({ email: 'test@example.com', password: 'wrong' }),
-      ).rejects.toThrow(UnauthorizedException);
+      await expect(service.login({ email: 'test@example.com', password: 'wrong' })).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
   });
 });

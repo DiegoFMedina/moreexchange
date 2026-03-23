@@ -66,7 +66,9 @@ export class PaymentsService {
       this.prisma.transaction.findMany({
         where: {
           userId,
-          status: { in: [TransactionStatus.COMPLETED, TransactionStatus.FAILED, TransactionStatus.REFUNDED] },
+          status: {
+            in: [TransactionStatus.COMPLETED, TransactionStatus.FAILED, TransactionStatus.REFUNDED],
+          },
         },
         orderBy: { createdAt: 'desc' },
         skip,
@@ -75,7 +77,9 @@ export class PaymentsService {
       this.prisma.transaction.count({
         where: {
           userId,
-          status: { in: [TransactionStatus.COMPLETED, TransactionStatus.FAILED, TransactionStatus.REFUNDED] },
+          status: {
+            in: [TransactionStatus.COMPLETED, TransactionStatus.FAILED, TransactionStatus.REFUNDED],
+          },
         },
       }),
     ]);

@@ -1,23 +1,16 @@
 // PATH: apps/api/src/modules/exchange/exchange.controller.ts
 // DESC: Controlador de exchange — cálculo público y órdenes autenticadas
 
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ExchangeService } from './exchange.service';
 import { CalculateExchangeDto, CreateOrderDto } from './dto/create-exchange.dto';
 import { Public } from '../../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-interface AuthReq { user: { id: string } }
+interface AuthReq {
+  user: { id: string };
+}
 
 @ApiTags('exchange')
 @Controller('exchange')
@@ -45,11 +38,7 @@ export class ExchangeController {
   @ApiOperation({ summary: 'Listar órdenes del usuario autenticado [JWT]' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  getOrders(
-    @Request() req: AuthReq,
-    @Query('page') page = 1,
-    @Query('limit') limit = 20,
-  ) {
+  getOrders(@Request() req: AuthReq, @Query('page') page = 1, @Query('limit') limit = 20) {
     return this.exchangeService.getOrders(req.user.id, +page, +limit);
   }
 

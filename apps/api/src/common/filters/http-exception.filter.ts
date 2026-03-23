@@ -9,7 +9,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 
 interface ErrorBody {
   message?: string | string[];
@@ -24,12 +24,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
-
     const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
 
     let code = 'INTERNAL_ERROR';
     let message = 'Error interno del servidor';
@@ -41,9 +37,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       if (typeof body === 'string') {
         message = body;
       } else {
-        message = Array.isArray(body.message)
-          ? body.message[0]
-          : (body.message ?? message);
+        message = Array.isArray(body.message) ? body.message[0] : (body.message ?? message);
         details = Array.isArray(body.message) ? body.message : [];
         code = body.error?.toUpperCase().replace(/ /g, '_') ?? this.statusToCode(status);
       }

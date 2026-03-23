@@ -1,7 +1,7 @@
 // PATH: apps/api/src/modules/exchange/exchange.service.ts
 // DESC: Servicio de exchange — cálculo de montos, creación de órdenes con Stripe PaymentIntent
 
-import { Injectable, NotFoundException, BadRequestException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { StripeService } from '../payments/stripe.service';
 import { CalculateExchangeDto, CreateOrderDto } from './dto/create-exchange.dto';

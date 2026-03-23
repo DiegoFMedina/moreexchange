@@ -108,3 +108,61 @@ model ApiKey {
   rateLimit  Int       @default(1000)
   createdAt  DateTime  @default(now())
 }
+
+// ─── Módulo de soporte vía tótem ───────────────────────────────────────────
+
+model Totem {
+  id          String        @id @default(cuid())
+  name        String
+  location    String
+  description String?
+  isActive    Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  sessions    ChatSession[]
+}
+
+model ChatSession {
+  id          String        @id @default(cuid())
+  totem       Totem         @relation(fields: [totemId], references: [id])
+  totemId     String
+  clientName  String
+  clientPhone String?
+  token       String        @unique @default(cuid())
+  status      ChatStatus    @default(OPEN)
+  startedAt   DateTime      @default(now())
+  closedAt    DateTime?
+  messages    ChatMessage[]
+}
+
+enum ChatStatus {
+  OPEN
+  RESOLVED
+  CLOSED
+}
+
+model ChatMessage {
+  id          String           @id @default(cuid())
+  session     ChatSession      @relation(fields: [sessionId], references: [id])
+  sessionId   String
+  content     String
+  sender      MessageSender
+  createdAt   DateTime         @default(now())
+  attachments ChatAttachment[]
+}
+
+enum MessageSender {
+  CLIENT
+  ADMIN
+}
+
+model ChatAttachment {
+  id        String      @id @default(cuid())
+  message   ChatMessage @relation(fields: [messageId], references: [id])
+  messageId String
+  filename  String
+  url       String
+  mimeType  String
+  size      Int
+  createdAt DateTime    @default(now())
+}

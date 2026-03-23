@@ -11,12 +11,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiTags,
-  ApiResponse,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
@@ -66,8 +61,8 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Renovar access token' })
-  refresh(@Request() req: AuthenticatedRequest, @Body() _dto: RefreshDto) {
-    return this.authService.refresh(req.user.sub, req.user.refreshToken!);
+  refresh(@Request() req: AuthenticatedRequest, @Body() dto: RefreshDto) {
+    return this.authService.refresh(req.user.sub, req.user.refreshToken ?? dto.refreshToken);
   }
 
   @UseGuards(JwtAuthGuard)

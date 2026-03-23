@@ -1,12 +1,7 @@
 // PATH: apps/api/src/modules/rates/rates.service.ts
 // DESC: Servicio de tasas — CRUD, historial, caché Redis y registro automático de RateHistory
 
-import {
-  Injectable,
-  NotFoundException,
-  ConflictException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RatesCacheService } from './rates.cache.service';
 import { CreateRateDto } from './dto/create-rate.dto';
@@ -43,8 +38,12 @@ export class RatesService {
     const rates = await this.prisma.exchangeRate.findMany({
       where: { isActive: true },
       include: {
-        fromCurrency: { select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true } },
-        toCurrency: { select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true } },
+        fromCurrency: {
+          select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true },
+        },
+        toCurrency: {
+          select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true },
+        },
       },
       orderBy: [{ fromCurrency: { code: 'asc' } }, { toCurrency: { code: 'asc' } }],
     });
@@ -65,8 +64,12 @@ export class RatesService {
         toCurrency: { code: to.toUpperCase() },
       },
       include: {
-        fromCurrency: { select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true } },
-        toCurrency: { select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true } },
+        fromCurrency: {
+          select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true },
+        },
+        toCurrency: {
+          select: { code: true, name: true, symbol: true, flagEmoji: true, decimals: true },
+        },
       },
     });
 

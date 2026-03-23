@@ -1,5 +1,5 @@
 // PATH: apps/web/app/admin/layout.tsx
-// DESC: Layout del panel admin — sidebar fijo con protección de ruta por rol ADMIN
+// DESC: Layout del panel admin — sidebar fijo con protección de ruta por rol ADMIN y badge de chat activo
 
 'use client';
 
@@ -7,14 +7,25 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useQuery } from '@tanstack/react-query';
 import { getCurrentUser, isAdmin } from '@/lib/auth';
+import api from '@/lib/api';
 
 const NAV_ITEMS = [
   {
     label: 'Dashboard',
     href: '/admin',
+    exact: true,
+    badge: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <rect x="2" y="2" width="5" height="5" rx="1" />
         <rect x="9" y="2" width="5" height="5" rx="1" />
         <rect x="2" y="9" width="5" height="5" rx="1" />
@@ -25,8 +36,17 @@ const NAV_ITEMS = [
   {
     label: 'Tasas',
     href: '/admin/rates',
+    exact: false,
+    badge: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <path d="M2 12l4-4 3 3 5-7" />
       </svg>
     ),
@@ -34,9 +54,36 @@ const NAV_ITEMS = [
   {
     label: 'Transacciones',
     href: '/admin/transactions',
+    exact: false,
+    badge: false,
     icon: (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <path d="M2 8h12M10 4l4 4-4 4" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Soporte',
+    href: '/admin/chat',
+    exact: false,
+    badge: true,
+    icon: (
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
+        <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H9l-3 2v-2H3a1 1 0 01-1-1V3z" />
       </svg>
     ),
   },
@@ -46,6 +93,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+
+  // Todos los hooks deben estar antes de cualquier early return
+  const { data: chatStats } = useQuery({
+    queryKey: ['admin', 'chat', 'stats-layout'],
+    queryFn: async () => {
+      const { data } = await api.get('/admin/chat/stats');
+      return data.data as { openSessions: number };
+    },
+    refetchInterval: 10000,
+    enabled: mounted,
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -71,14 +129,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <div className="w-6 h-6 relative flex-shrink-0">
               <Image src="/logo.svg" alt="More Exchange" fill className="object-contain" />
             </div>
-            <span className="font-display font-bold text-[13px] text-gray-900 truncate">More Exchange</span>
+            <span className="font-display font-bold text-[13px] text-gray-900 truncate">
+              More Exchange
+            </span>
           </Link>
         </div>
 
         {/* Nav */}
         <nav className="flex-1 py-4 px-2 space-y-0.5">
           {NAV_ITEMS.map((item) => {
-            const active = pathname === item.href;
+            const active = item.exact
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(item.href + '/');
+            const openCount = item.badge ? (chatStats?.openSessions ?? 0) : 0;
+
             return (
               <Link
                 key={item.href}
@@ -90,7 +154,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 }`}
               >
                 <span className={active ? 'text-blue-600' : 'text-gray-400'}>{item.icon}</span>
-                {item.label}
+                <span className="flex-1">{item.label}</span>
+                {item.badge && openCount > 0 && (
+                  <span className="bg-emerald-500 text-white text-[9px] font-bold rounded-full px-1.5 py-0.5 min-w-[18px] text-center leading-none">
+                    {openCount}
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -102,7 +171,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             href="/"
             className="flex items-center gap-2.5 px-3 py-2 rounded-md text-[13px] font-sans text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-colors"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            >
               <path d="M10 12L6 8l4-4" />
             </svg>
             Volver a la página principal
@@ -119,9 +195,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Main */}
-      <main className="flex-1 ml-56 min-h-screen">
-        {children}
-      </main>
+      <main className="flex-1 ml-56 min-h-screen">{children}</main>
     </div>
   );
 }

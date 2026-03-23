@@ -6,7 +6,7 @@ import { RatesService } from './rates.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RatesCacheService } from './rates.cache.service';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
-import { NotFoundException, ConflictException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 describe('RatesService', () => {
   let service: RatesService;

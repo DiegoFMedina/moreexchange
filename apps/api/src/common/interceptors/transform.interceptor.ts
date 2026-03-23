@@ -1,12 +1,7 @@
 // PATH: apps/api/src/common/interceptors/transform.interceptor.ts
 // DESC: Interceptor global que envuelve todas las respuestas exitosas en { success: true, data: ..., meta: {...} }
 
-import {
-  CallHandler,
-  ExecutionContext,
-  Injectable,
-  NestInterceptor,
-} from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 

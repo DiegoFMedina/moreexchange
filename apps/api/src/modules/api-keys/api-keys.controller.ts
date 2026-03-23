@@ -1,22 +1,15 @@
 // PATH: apps/api/src/modules/api-keys/api-keys.controller.ts
 // DESC: Controlador de API Keys — todos los endpoints requieren JWT
 
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiKeysService } from './api-keys.service';
 import { CreateApiKeyDto } from './dto/create-api-key.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
-interface AuthReq { user: { id: string } }
+interface AuthReq {
+  user: { id: string };
+}
 
 @ApiTags('api-keys')
 @Controller('api-keys')
