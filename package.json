@@ -42,7 +42,7 @@
       "pnpm --filter @moreexchange/web lint:fix",
       "prettier --write"
     ],
-    "apps/api/**/*.ts": [
+    "apps/api/**/!(*.d).ts": [
       "pnpm --filter @moreexchange/api lint:fix",
       "prettier --write"
     ],

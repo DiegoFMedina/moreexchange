@@ -11,6 +11,33 @@ import { ChatController } from './chat.controller';
 import { ChatService } from './chat.service';
 
 const UPLOAD_DIR = './uploads/chat';
+const ALLOWED_EXTENSIONS = new Set([
+  '.jpg',
+  '.jpeg',
+  '.png',
+  '.gif',
+  '.webp',
+  '.pdf',
+  '.mp4',
+  '.mov',
+  '.avi',
+  '.txt',
+  '.doc',
+  '.docx',
+]);
+const ALLOWED_MIME_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'application/pdf',
+  'video/mp4',
+  'video/quicktime',
+  'video/x-msvideo',
+  'text/plain',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+]);
 
 @Module({
   imports: [
@@ -27,8 +54,10 @@ const UPLOAD_DIR = './uploads/chat';
       }),
       limits: { fileSize: 10 * 1024 * 1024 },
       fileFilter: (_req, file, cb) => {
-        const allowed = /jpeg|jpg|png|gif|webp|pdf|mp4|mov|avi|txt|doc|docx/;
-        const ok = allowed.test(extname(file.originalname).toLowerCase());
+        const extension = extname(file.originalname).toLowerCase();
+        const hasSafeExtension = ALLOWED_EXTENSIONS.has(extension);
+        const hasSafeMimeType = ALLOWED_MIME_TYPES.has(file.mimetype);
+        const ok = hasSafeExtension && hasSafeMimeType;
         cb(ok ? null : new Error('Tipo de archivo no permitido'), ok);
       },
     }),

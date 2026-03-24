@@ -39,7 +39,18 @@ cd apps/api && pnpm build && cd "${APP_DIR}"
 log "  API compilada en apps/api/dist/"
 
 # ── 4. Build Web ──────────────────────────────────────────────────────────────
+# Next.js hornea NEXT_PUBLIC_* en tiempo de build. Si no está definida, el cliente
+# pide tasas a localhost y en producción no se ven. Cargamos .env de la raíz para
+# que NEXT_PUBLIC_API_URL esté disponible durante el build.
 log "4/6 Build Web (Next.js)..."
+if [ -f "${APP_DIR}/.env" ]; then
+  set -a
+  # shellcheck source=/dev/null
+  source "${APP_DIR}/.env"
+  set +a
+  [ -n "${NEXT_PUBLIC_API_URL:-}" ] && log "  NEXT_PUBLIC_API_URL definida para el build"
+fi
+[ -z "${NEXT_PUBLIC_API_URL:-}" ] && warn "  NEXT_PUBLIC_API_URL no definida: el hero pedirá tasas a localhost (no se verán en producción)"
 cd apps/web && pnpm build && cd "${APP_DIR}"
 log "  Web compilada en apps/web/.next/"
 

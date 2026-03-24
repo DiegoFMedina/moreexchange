@@ -2,8 +2,9 @@
 // DESC: Instancia Axios con interceptores — inyecta Authorization header y maneja refresh automático
 
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { resolveApiUrl } from '@/lib/runtime-urls';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/v1';
+const API_URL = resolveApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL,

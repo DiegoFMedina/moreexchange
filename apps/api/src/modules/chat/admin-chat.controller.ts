@@ -1,5 +1,4 @@
 // PATH: apps/api/src/modules/chat/admin-chat.controller.ts
-// DESC: Endpoints del panel admin para el módulo de soporte — requiere rol ADMIN
 
 import {
   Body,
@@ -9,11 +8,12 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
   UploadedFiles,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { ChatStatus, Role } from '@prisma/client';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -32,12 +32,20 @@ import { UpdateSessionStatusDto } from './dto/update-session.dto';
 export class AdminChatController {
   constructor(private readonly chatService: ChatService) {}
 
-  // ─── Stats ─────────────────────────────────────────────────────────────────
+  // ─── Stats / Dashboard ─────────────────────────────────────────────────────
 
   @Get('stats')
   @ApiOperation({ summary: '[ADMIN] Estadísticas del módulo de soporte' })
   getStats() {
     return this.chatService.getChatStats();
+  }
+
+  @Get('dashboard')
+  @ApiOperation({ summary: '[ADMIN] Dashboard: fallos, estados, tótems, transferencias' })
+  @ApiQuery({ name: 'from', required: false, type: String, description: 'ISO date' })
+  @ApiQuery({ name: 'to', required: false, type: String, description: 'ISO date' })
+  getDashboard(@Query('from') from?: string, @Query('to') to?: string) {
+    return this.chatService.getDashboard(from, to);
   }
 
   // ─── Tótems ─────────────────────────────────────────────────────────────────
@@ -104,8 +112,31 @@ export class AdminChatController {
   }
 
   @Patch('sessions/:id/status')
-  @ApiOperation({ summary: '[ADMIN] Cambiar estado de sesión (OPEN/RESOLVED/CLOSED)' })
+  @ApiOperation({ summary: '[ADMIN] Cambiar estado de sesión — faultType requerido al cerrar' })
   updateStatus(@Param('id') id: string, @Body() dto: UpdateSessionStatusDto) {
-    return this.chatService.updateSessionStatus(id, dto.status);
+    return this.chatService.updateSessionStatus(id, dto.status, dto.faultType, dto.closingNote);
+  }
+
+  // ─── Transferencias ────────────────────────────────────────────────────────
+
+  @Post('sessions/:id/transfer-request')
+  @ApiOperation({ summary: '[ADMIN] Enviar formulario de devolución al cliente' })
+  sendTransferForm(@Param('id') id: string) {
+    return this.chatService.sendTransferForm(id);
+  }
+
+  @Get('sessions/:id/transfer-request')
+  @ApiOperation({ summary: '[ADMIN] Ver datos de transferencia llenados por el cliente' })
+  getTransferRequest(@Param('id') id: string) {
+    return this.chatService.getTransferRequest(id);
+  }
+
+  @Post('sessions/:id/voucher')
+  @ApiOperation({ summary: '[ADMIN] Subir comprobante de transferencia' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('voucher'))
+  uploadVoucher(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new Error('Se requiere el archivo del comprobante');
+    return this.chatService.uploadVoucher(id, file);
   }
 }

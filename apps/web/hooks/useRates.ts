@@ -23,6 +23,7 @@ export function useRates() {
     queryFn: fetchRates,
     refetchInterval: 30_000,
     staleTime: 30_000,
+    retry: 0, // fallo rápido para mostrar error (CORS, URL incorrecta, etc.)
   });
 }
 

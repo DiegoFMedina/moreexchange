@@ -109,7 +109,19 @@ model ApiKey {
   createdAt  DateTime  @default(now())
 }
 
-// ─── Módulo de soporte vía tótem ───────────────────────────────────────────
+// ─── Módulo de soporte vía tótem / tickets ─────────────────────────────────
+
+enum FaultType {
+  TRANSACTION_ERROR      // Error en transacción / monto incorrecto
+  DEVICE_FAILURE         // Fallo de hardware del tótem
+  CONNECTIVITY_ISSUE     // Problema de red o conectividad
+  REFUND_REQUEST         // Solicitud de devolución de dinero
+  RECEIPT_MISSING        // Comprobante no emitido
+  RATE_DISCREPANCY       // Diferencia en tipo de cambio
+  USER_ERROR             // Error del usuario
+  SYSTEM_ERROR           // Error del sistema interno
+  OTHER                  // Otro / no clasificado
+}
 
 model Totem {
   id          String        @id @default(cuid())
@@ -123,20 +135,28 @@ model Totem {
 }
 
 model ChatSession {
-  id          String        @id @default(cuid())
-  totem       Totem         @relation(fields: [totemId], references: [id])
-  totemId     String
-  clientName  String
-  clientPhone String?
-  token       String        @unique @default(cuid())
-  status      ChatStatus    @default(OPEN)
-  startedAt   DateTime      @default(now())
-  closedAt    DateTime?
-  messages    ChatMessage[]
+  id                String           @id @default(cuid())
+  totem             Totem            @relation(fields: [totemId], references: [id])
+  totemId           String
+  clientName        String
+  clientPhone       String?
+  token             String           @unique @default(cuid())
+  status            ChatStatus       @default(OPEN)
+  faultType         FaultType?
+  closingNote       String?
+  startedAt         DateTime         @default(now())
+  closedAt          DateTime?
+  messages          ChatMessage[]
+  transferRequest   TransferRequest?
+  // Sesión anterior del mismo cliente (para monitoreo de reincidencia)
+  relatedSessionId  String?
+  relatedSession    ChatSession?     @relation("SessionChain", fields: [relatedSessionId], references: [id])
+  continuedBy       ChatSession[]    @relation("SessionChain")
 }
 
 enum ChatStatus {
   OPEN
+  PENDING
   RESOLVED
   CLOSED
 }
@@ -147,6 +167,7 @@ model ChatMessage {
   sessionId   String
   content     String
   sender      MessageSender
+  messageType MessageType      @default(TEXT)
   createdAt   DateTime         @default(now())
   attachments ChatAttachment[]
 }
@@ -154,6 +175,14 @@ model ChatMessage {
 enum MessageSender {
   CLIENT
   ADMIN
+  SYSTEM
+}
+
+enum MessageType {
+  TEXT
+  TRANSFER_FORM
+  TRANSFER_DATA
+  VOUCHER
 }
 
 model ChatAttachment {
@@ -165,4 +194,31 @@ model ChatAttachment {
   mimeType  String
   size      Int
   createdAt DateTime    @default(now())
+}
+
+// Formulario de devolución — un solo request por sesión
+model TransferRequest {
+  id            String                @id @default(cuid())
+  session       ChatSession           @relation(fields: [sessionId], references: [id])
+  sessionId     String                @unique
+  // Datos que rellena el cliente
+  bankName      String?
+  accountType   String?
+  accountNumber String?
+  rut           String?
+  accountHolder String?
+  amount        Decimal?              @db.Decimal(18, 2)
+  currency      String?
+  notes         String?
+  status        TransferRequestStatus @default(PENDING)
+  voucherUrl    String?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+}
+
+enum TransferRequestStatus {
+  PENDING      // Admin envió el form, cliente aún no llena
+  FILLED       // Cliente envió sus datos
+  TRANSFERRED  // Admin hizo la transferencia y subió comprobante
+  CANCELLED    // Cancelado
 }

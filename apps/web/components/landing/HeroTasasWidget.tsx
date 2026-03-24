@@ -11,7 +11,8 @@ import type { ExchangeRate } from '@/types';
 function fmtN(n: number): string {
   if (Number.isNaN(n) || !Number.isFinite(n)) return '—';
   if (n >= 100) return n.toLocaleString('es-CL', { maximumFractionDigits: 0 });
-  if (n >= 1) return n.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  if (n >= 1)
+    return n.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   return n.toLocaleString('es-CL', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 }
 
@@ -38,7 +39,7 @@ function filterRates(rates: ExchangeRate[], active: Filter): ExchangeRate[] {
 const MAX_ROWS = 6;
 
 export function HeroTasasWidget() {
-  const { data: rates, isLoading, dataUpdatedAt } = useRates();
+  const { data: rates, isLoading, error, dataUpdatedAt, refetch, isRefetching } = useRates();
   const [filter, setFilter] = useState<Filter>('all');
   const [countdown, setCountdown] = useState(30);
 
@@ -92,18 +93,47 @@ export function HeroTasasWidget() {
       <div className="overflow-x-auto overflow-y-hidden -mx-1 px-1 pr-2">
         <div className="min-w-[260px]">
           <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2 border-t border-white/[0.07] border-b border-white/[0.07]">
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium truncate">Par</div>
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Compra</div>
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">Venta</div>
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">%</div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium truncate">
+              Par
+            </div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">
+              Compra
+            </div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">
+              Venta
+            </div>
+            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">
+              %
+            </div>
           </div>
 
           <div className="min-h-[120px]">
             {isLoading && (
               <div className="py-8 text-center text-[12px] text-white/45">Cargando tasas...</div>
             )}
-            {!isLoading && visible.length === 0 && (
-              <div className="py-8 text-center text-[12px] text-white/45">Sin tasas disponibles</div>
+            {!isLoading && error && (
+              <div className="py-6 text-center text-[12px] text-white/60 space-y-2">
+                <p>No se pudieron cargar las tasas.</p>
+                <p className="flex flex-wrap items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => refetch()}
+                    disabled={isRefetching}
+                    className="text-[#00C2FF] hover:underline disabled:opacity-50"
+                  >
+                    {isRefetching ? 'Reintentando…' : 'Reintentar'}
+                  </button>
+                  <span className="text-white/40">·</span>
+                  <Link href="/rates" className="text-[#00C2FF] hover:underline">
+                    Ver tasas
+                  </Link>
+                </p>
+              </div>
+            )}
+            {!isLoading && !error && visible.length === 0 && (
+              <div className="py-8 text-center text-[12px] text-white/45">
+                Sin tasas disponibles
+              </div>
             )}
             {!isLoading &&
               visible.length > 0 &&
@@ -139,7 +169,9 @@ export function HeroTasasWidget() {
                     <div className="text-right">
                       <span
                         className={`inline-flex items-center gap-0.5 py-0.5 px-1.5 rounded-lg text-[10px] font-mono font-medium ${
-                          isDown ? 'bg-[rgba(255,92,92,0.1)] text-[#FF5C5C]' : 'bg-[rgba(0,229,160,0.1)] text-[#00E5A0]'
+                          isDown
+                            ? 'bg-[rgba(255,92,92,0.1)] text-[#FF5C5C]'
+                            : 'bg-[rgba(0,229,160,0.1)] text-[#00E5A0]'
                         }`}
                       >
                         {isDown ? '▼' : '▲'}

@@ -7,8 +7,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import Image from 'next/image';
+import { resolveApiBaseUrl, resolveApiUrl } from '@/lib/runtime-urls';
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001/v1';
+const API = resolveApiUrl();
 
 interface Totem {
   id: string;
@@ -28,19 +29,27 @@ interface Attachment {
 interface Message {
   id: string;
   content: string;
-  sender: 'CLIENT' | 'ADMIN';
+  sender: 'CLIENT' | 'ADMIN' | 'SYSTEM';
+  messageType: 'TEXT' | 'TRANSFER_FORM' | 'TRANSFER_DATA' | 'VOUCHER';
   createdAt: string;
   attachments: Attachment[];
+}
+
+interface TransferRequest {
+  id: string;
+  status: 'PENDING' | 'FILLED' | 'TRANSFERRED' | 'CANCELLED';
 }
 
 interface Session {
   id: string;
   token: string;
   clientName: string;
-  status: 'OPEN' | 'RESOLVED' | 'CLOSED';
+  clientPhone?: string;
+  status: 'OPEN' | 'PENDING' | 'RESOLVED' | 'CLOSED';
   startedAt: string;
   totem: Totem;
   messages: Message[];
+  transferRequest?: TransferRequest | null;
 }
 
 type Screen = 'loading' | 'welcome' | 'form' | 'chat' | 'error';
@@ -54,6 +63,25 @@ export default function ChatClientPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [errorMsg, setErrorMsg] = useState('');
+  const [wasClosedByAdmin, setWasClosedByAdmin] = useState(false);
+
+  // Vinculación de sesiones
+  const [relatedSessionToken, setRelatedSessionToken] = useState<string | null>(null);
+
+  // Transfer form
+  const [showTransferForm, setShowTransferForm] = useState(false);
+  const [transferForm, setTransferForm] = useState({
+    bankName: '',
+    accountType: '',
+    accountNumber: '',
+    rut: '',
+    accountHolder: '',
+    amount: '',
+    currency: 'CLP',
+    notes: '',
+  });
+  const [isSubmittingTransfer, setIsSubmittingTransfer] = useState(false);
+  const [transferSubmitted, setTransferSubmitted] = useState(false);
 
   // Form fields
   const [clientName, setClientName] = useState('');
@@ -88,14 +116,29 @@ export default function ChatClientPage() {
     const saved = localStorage.getItem(`chat_session_${totemId}`);
     if (saved) {
       try {
-        const parsed = JSON.parse(saved) as { token: string };
+        const parsed = JSON.parse(saved) as {
+          token: string;
+          clientName?: string;
+          clientPhone?: string;
+        };
         axios
           .get<{ data: Session }>(`${API}/chat/sessions/${parsed.token}`)
           .then(({ data }) => {
-            setSession(data.data);
-            setMessages(data.data.messages);
-            lastMsgTime.current = data.data.messages.at(-1)?.createdAt ?? data.data.startedAt;
-            setTotem(data.data.totem);
+            const sess = data.data;
+            setSession(sess);
+            setMessages(sess.messages);
+            lastMsgTime.current = sess.messages.at(-1)?.createdAt ?? sess.startedAt;
+            setTotem(sess.totem);
+            // Restaurar estado del formulario de transferencia
+            if (
+              sess.transferRequest?.status === 'FILLED' ||
+              sess.transferRequest?.status === 'TRANSFERRED'
+            ) {
+              setTransferSubmitted(true);
+            }
+            // Pre-cargar datos del cliente para facilitar continuación
+            if (parsed.clientName) setClientName(parsed.clientName);
+            if (parsed.clientPhone) setClientPhone(parsed.clientPhone);
             setScreen('chat');
           })
           .catch(() => {
@@ -129,6 +172,21 @@ export default function ChatClientPage() {
 
     pollingRef.current = setInterval(async () => {
       try {
+        const sessionResponse = await axios.get<{ data: Session }>(
+          `${API}/chat/sessions/${session.token}`,
+        );
+        const latestSession = sessionResponse.data.data;
+        setSession((prev) => {
+          if (prev?.status !== 'CLOSED' && latestSession.status === 'CLOSED') {
+            setWasClosedByAdmin(true);
+          }
+          // Si el admin envió formulario de transferencia, mostrar el form
+          if (latestSession.transferRequest?.status === 'PENDING' && !transferSubmitted) {
+            setShowTransferForm(true);
+          }
+          return latestSession;
+        });
+
         const url = lastMsgTime.current
           ? `${API}/chat/sessions/${session.token}/messages?since=${encodeURIComponent(lastMsgTime.current)}`
           : `${API}/chat/sessions/${session.token}/messages`;
@@ -151,7 +209,7 @@ export default function ChatClientPage() {
     return () => {
       if (pollingRef.current) clearInterval(pollingRef.current);
     };
-  }, [screen, session]);
+  }, [screen, session, transferSubmitted]);
 
   useEffect(() => {
     scrollToBottom();
@@ -168,13 +226,24 @@ export default function ChatClientPage() {
         clientName: clientName.trim(),
         clientPhone: clientPhone.trim() || undefined,
         initialMessage: initialMessage.trim() || undefined,
+        ...(relatedSessionToken ? { relatedSessionToken } : {}),
       });
 
       const sess = data.data;
+      const sessionMessages = Array.isArray(sess.messages) ? sess.messages : [];
       setSession(sess);
-      setMessages(sess.messages ?? []);
-      lastMsgTime.current = sess.messages.at(-1)?.createdAt ?? sess.startedAt;
-      localStorage.setItem(`chat_session_${totemId}`, JSON.stringify({ token: sess.token }));
+      setMessages(sessionMessages);
+      lastMsgTime.current = sessionMessages.at(-1)?.createdAt ?? sess.startedAt;
+      // Persistir token + datos del cliente para restauración y continuación futura
+      localStorage.setItem(
+        `chat_session_${totemId}`,
+        JSON.stringify({
+          token: sess.token,
+          clientName: sess.clientName,
+          clientPhone: sess.clientPhone ?? '',
+        }),
+      );
+      setRelatedSessionToken(null);
       setScreen('chat');
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
@@ -225,16 +294,78 @@ export default function ChatClientPage() {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
   }
 
+  async function handleSubmitTransferData(e: React.FormEvent) {
+    e.preventDefault();
+    if (!session) return;
+    setIsSubmittingTransfer(true);
+    try {
+      await axios.post(`${API}/chat/sessions/${session.token}/transfer-data`, transferForm);
+      setTransferSubmitted(true);
+      setShowTransferForm(false);
+    } catch {
+      // silent
+    } finally {
+      setIsSubmittingTransfer(false);
+    }
+  }
+
+  // Continuar tras sesión cerrada: pre-rellena datos y vincula al ticket anterior
+  function handleContinueAfterClose() {
+    if (!totemId || !session) return;
+    const prevToken = session.token;
+    const prevName = session.clientName;
+    const prevPhone = session.clientPhone ?? '';
+
+    setRelatedSessionToken(prevToken);
+    setClientName(prevName);
+    setClientPhone(prevPhone);
+    setInitialMessage('');
+    setSession(null);
+    setMessages([]);
+    setInput('');
+    setFiles([]);
+    setWasClosedByAdmin(false);
+    setShowTransferForm(false);
+    setTransferSubmitted(false);
+    setTransferForm({
+      bankName: '',
+      accountType: '',
+      accountNumber: '',
+      rut: '',
+      accountHolder: '',
+      amount: '',
+      currency: 'CLP',
+      notes: '',
+    });
+    setErrorMsg('');
+    setScreen('form');
+  }
+
+  // Nueva sesión desde cero (botón reset en header)
   function handleNewSession() {
     if (!totemId) return;
     localStorage.removeItem(`chat_session_${totemId}`);
     setSession(null);
+    setRelatedSessionToken(null);
     setMessages([]);
     setInput('');
     setFiles([]);
     setClientName('');
     setClientPhone('');
     setInitialMessage('');
+    setWasClosedByAdmin(false);
+    setShowTransferForm(false);
+    setTransferSubmitted(false);
+    setTransferForm({
+      bankName: '',
+      accountType: '',
+      accountNumber: '',
+      rut: '',
+      accountHolder: '',
+      amount: '',
+      currency: 'CLP',
+      notes: '',
+    });
     setScreen('welcome');
   }
 
@@ -387,10 +518,26 @@ export default function ChatClientPage() {
             Volver
           </button>
 
+          {relatedSessionToken && (
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl px-4 py-3 mb-5">
+              <p className="text-amber-400 text-[13px] font-semibold flex items-center gap-2">
+                <span>🔄</span> Continuación del ticket anterior
+              </p>
+              <p className="text-gray-500 text-[11px] mt-0.5 leading-relaxed">
+                Tu nuevo ticket quedará vinculado al anterior para que el equipo pueda hacer
+                seguimiento. Tus datos están pre-rellenados.
+              </p>
+            </div>
+          )}
+
           <div className="mb-7">
-            <h2 className="text-white text-xl font-bold">Cuéntanos quién eres</h2>
+            <h2 className="text-white text-xl font-bold">
+              {relatedSessionToken ? 'Confirma tus datos' : 'Cuéntanos quién eres'}
+            </h2>
             <p className="text-gray-500 text-sm mt-1">
-              Solo necesitamos tu nombre para poder ayudarte mejor.
+              {relatedSessionToken
+                ? 'Revisa o actualiza tu información antes de continuar.'
+                : 'Solo necesitamos tu nombre para poder ayudarte mejor.'}
             </p>
           </div>
 
@@ -452,6 +599,8 @@ export default function ChatClientPage() {
                   <span className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
                   Iniciando...
                 </span>
+              ) : relatedSessionToken ? (
+                'Continuar con nuevo ticket →'
               ) : (
                 'Comenzar Chat →'
               )}
@@ -464,6 +613,7 @@ export default function ChatClientPage() {
 
   // ─── Pantalla de Chat ───────────────────────────────────────────────────────
   const isClosed = session?.status === 'CLOSED';
+  const apiBase = resolveApiBaseUrl();
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] flex flex-col">
@@ -531,13 +681,25 @@ export default function ChatClientPage() {
         </div>
 
         {messages.map((msg) => (
-          <MessageBubble key={msg.id} msg={msg} apiBase={API.replace('/v1', '')} />
+          <MessageBubble
+            key={msg.id}
+            msg={msg}
+            apiBase={apiBase}
+            onOpenTransferForm={() => {
+              if (!transferSubmitted) setShowTransferForm(true);
+            }}
+            transferSubmitted={transferSubmitted}
+          />
         ))}
 
         {isClosed && (
           <div className="flex justify-center">
             <div className="bg-red-500/10 border border-red-500/20 rounded-full px-4 py-2">
-              <p className="text-red-400 text-xs">Esta sesión fue cerrada por el administrador</p>
+              <p className="text-red-400 text-xs">
+                {wasClosedByAdmin
+                  ? 'El administrador cerró la conversación. Puedes iniciar una nueva sesión.'
+                  : 'Esta sesión fue cerrada por el administrador'}
+              </p>
             </div>
           </div>
         )}
@@ -649,13 +811,192 @@ export default function ChatClientPage() {
       )}
 
       {isClosed && (
-        <div className="bg-[#0f0f18]/95 border-t border-white/[0.06] p-4">
+        <div className="bg-[#0f0f18]/95 border-t border-white/[0.06] p-4 space-y-2">
+          <button
+            onClick={handleContinueAfterClose}
+            className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold rounded-xl transition-all duration-200 text-[14px]"
+          >
+            ¿Necesitas más ayuda? Abrir nuevo ticket
+          </button>
           <button
             onClick={handleNewSession}
-            className="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold rounded-xl transition-all duration-200"
+            className="w-full py-2 text-gray-600 hover:text-gray-400 text-[12px] transition-colors"
           >
-            Iniciar nueva conversación
+            Iniciar desde cero (borrar historial)
           </button>
+        </div>
+      )}
+
+      {/* Modal formulario de transferencia */}
+      {showTransferForm && !transferSubmitted && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="bg-[#12121e] border border-white/10 rounded-t-3xl sm:rounded-2xl w-full sm:max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-[#12121e] border-b border-white/[0.06] px-5 py-4 flex items-center justify-between">
+              <div>
+                <p className="text-amber-400 text-[11px] font-bold tracking-widest uppercase">
+                  Soporte More Exchange
+                </p>
+                <h3 className="text-white font-bold text-[16px] mt-0.5">
+                  Formulario de devolución
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowTransferForm(false)}
+                className="p-2 text-gray-500 hover:text-gray-300 rounded-lg hover:bg-white/5"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18 18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <div className="px-5 py-4">
+              <p className="text-gray-400 text-sm leading-relaxed mb-5">
+                El agente de soporte solicita tus datos bancarios para procesar la devolución de
+                dinero. Todos los datos son tratados de forma segura.
+              </p>
+
+              <form onSubmit={handleSubmitTransferData} className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2">
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Titular de la cuenta *
+                    </label>
+                    <input
+                      required
+                      value={transferForm.accountHolder}
+                      onChange={(e) =>
+                        setTransferForm({ ...transferForm, accountHolder: e.target.value })
+                      }
+                      placeholder="Nombre completo"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      RUT *
+                    </label>
+                    <input
+                      required
+                      value={transferForm.rut}
+                      onChange={(e) => setTransferForm({ ...transferForm, rut: e.target.value })}
+                      placeholder="12.345.678-9"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Banco *
+                    </label>
+                    <input
+                      required
+                      value={transferForm.bankName}
+                      onChange={(e) =>
+                        setTransferForm({ ...transferForm, bankName: e.target.value })
+                      }
+                      placeholder="Banco Estado"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Tipo de cuenta *
+                    </label>
+                    <select
+                      required
+                      value={transferForm.accountType}
+                      onChange={(e) =>
+                        setTransferForm({ ...transferForm, accountType: e.target.value })
+                      }
+                      className="w-full bg-[#0a0a0f] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    >
+                      <option value="">Seleccionar</option>
+                      <option value="Cuenta Corriente">Cuenta Corriente</option>
+                      <option value="Cuenta Vista">Cuenta Vista</option>
+                      <option value="Cuenta Ahorro">Cuenta Ahorro</option>
+                      <option value="Cuenta RUT">Cuenta RUT</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Número de cuenta *
+                    </label>
+                    <input
+                      required
+                      value={transferForm.accountNumber}
+                      onChange={(e) =>
+                        setTransferForm({ ...transferForm, accountNumber: e.target.value })
+                      }
+                      placeholder="00000000"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Monto a devolver
+                    </label>
+                    <input
+                      type="number"
+                      value={transferForm.amount}
+                      onChange={(e) => setTransferForm({ ...transferForm, amount: e.target.value })}
+                      placeholder="0"
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Moneda
+                    </label>
+                    <select
+                      value={transferForm.currency}
+                      onChange={(e) =>
+                        setTransferForm({ ...transferForm, currency: e.target.value })
+                      }
+                      className="w-full bg-[#0a0a0f] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500/50 text-[14px]"
+                    >
+                      <option value="CLP">CLP</option>
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                    </select>
+                  </div>
+                  <div className="col-span-2">
+                    <label className="block text-gray-400 text-[11px] font-medium mb-1.5 uppercase tracking-wide">
+                      Observaciones adicionales
+                    </label>
+                    <textarea
+                      value={transferForm.notes}
+                      onChange={(e) => setTransferForm({ ...transferForm, notes: e.target.value })}
+                      placeholder="Información adicional para el agente..."
+                      rows={2}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500/50 text-[14px] resize-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowTransferForm(false)}
+                    className="flex-1 py-3 border border-white/10 text-gray-400 rounded-xl text-[13px] font-medium hover:bg-white/5"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isSubmittingTransfer}
+                    className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-bold rounded-xl transition-all text-[13px] disabled:opacity-50"
+                  >
+                    {isSubmittingTransfer ? 'Enviando...' : 'Enviar datos'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -664,8 +1005,103 @@ export default function ChatClientPage() {
 
 // ─── Componente burbuja de mensaje ──────────────────────────────────────────
 
-function MessageBubble({ msg, apiBase }: { msg: Message; apiBase: string }) {
+function MessageBubble({
+  msg,
+  apiBase,
+  onOpenTransferForm,
+  transferSubmitted,
+}: {
+  msg: Message;
+  apiBase: string;
+  onOpenTransferForm: () => void;
+  transferSubmitted: boolean;
+}) {
   const isClient = msg.sender === 'CLIENT';
+  const isSystem = msg.sender === 'SYSTEM';
+
+  if (isSystem) {
+    return (
+      <div className="flex justify-center">
+        <span className="bg-white/5 border border-white/[0.06] text-gray-500 text-[10px] px-3 py-1.5 rounded-full italic">
+          {msg.content}
+        </span>
+      </div>
+    );
+  }
+
+  if (msg.messageType === 'TRANSFER_FORM') {
+    return (
+      <div className="flex justify-start">
+        <div className="max-w-[85%] bg-amber-500/10 border border-amber-500/30 rounded-2xl rounded-bl-sm px-4 py-3">
+          <p className="text-amber-400 text-[10px] font-bold tracking-widest uppercase mb-1">
+            Soporte
+          </p>
+          <p className="text-white/90 text-sm leading-relaxed mb-3">{msg.content}</p>
+          {!transferSubmitted ? (
+            <button
+              onClick={onOpenTransferForm}
+              className="w-full py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-[13px] transition-colors"
+            >
+              📋 Completar formulario de devolución
+            </button>
+          ) : (
+            <div className="py-2 text-center">
+              <span className="text-emerald-400 text-[12px] font-medium">
+                ✓ Datos enviados correctamente
+              </span>
+            </div>
+          )}
+          <p className="text-gray-600 text-[10px] mt-2">
+            {new Date(msg.createdAt).toLocaleTimeString('es-CL', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (msg.messageType === 'TRANSFER_DATA') {
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[80%] bg-emerald-500/10 border border-emerald-500/20 rounded-2xl rounded-br-sm px-4 py-3">
+          <p className="text-emerald-400 text-[10px] font-bold tracking-widest uppercase mb-1">
+            Tú
+          </p>
+          <p className="text-white/80 text-sm leading-relaxed">{msg.content}</p>
+          <p className="text-gray-600 text-[10px] mt-1.5">
+            {new Date(msg.createdAt).toLocaleTimeString('es-CL', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (msg.messageType === 'VOUCHER') {
+    return (
+      <div className="flex justify-start">
+        <div className="max-w-[85%] bg-emerald-500/10 border border-emerald-500/20 rounded-2xl rounded-bl-sm px-4 py-3">
+          <p className="text-amber-400 text-[10px] font-bold tracking-widest uppercase mb-1">
+            Soporte
+          </p>
+          <p className="text-white/90 text-sm leading-relaxed mb-2">{msg.content}</p>
+          {msg.attachments.map((att) => (
+            <AttachmentPreview key={att.id} att={att} apiBase={apiBase} isClient={false} />
+          ))}
+          <p className="text-gray-600 text-[10px] mt-1.5">
+            {new Date(msg.createdAt).toLocaleTimeString('es-CL', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`flex ${isClient ? 'justify-end' : 'justify-start'}`}>
@@ -716,7 +1152,10 @@ function AttachmentPreview({
   apiBase: string;
   isClient: boolean;
 }) {
-  const url = att.url.startsWith('http') ? att.url : `${apiBase}${att.url}`;
+  const normalizedPath = att.url.startsWith('/uploads/')
+    ? att.url.replace('/uploads/', '/v1/uploads/')
+    : att.url;
+  const url = normalizedPath.startsWith('http') ? normalizedPath : `${apiBase}${normalizedPath}`;
   const isImage = att.mimeType.startsWith('image/');
   const isVideo = att.mimeType.startsWith('video/');
 

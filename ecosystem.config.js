@@ -30,7 +30,7 @@ module.exports = {
     },
     {
       name: 'cambios-api',
-      script: 'dist/main.js',
+      script: 'dist/src/main.js',
       cwd: './apps/api',
       instances: 2,
       exec_mode: 'cluster',

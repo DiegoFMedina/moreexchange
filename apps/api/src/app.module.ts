@@ -44,7 +44,8 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     // Archivos estáticos para adjuntos del chat
     ServeStaticModule.forRoot({
       rootPath: join(process.cwd(), 'uploads'),
-      serveRoot: '/uploads',
+      // Servir adjuntos bajo /v1 para pasar siempre por el mismo reverse proxy de API.
+      serveRoot: '/v1/uploads',
     }),
 
     PrismaModule,

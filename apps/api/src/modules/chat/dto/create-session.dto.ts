@@ -25,4 +25,11 @@ export class CreateSessionDto {
   @IsString()
   @IsOptional()
   initialMessage?: string;
+
+  @ApiPropertyOptional({
+    description: 'Token de la sesión anterior (para vincular tickets del mismo cliente)',
+  })
+  @IsString()
+  @IsOptional()
+  relatedSessionToken?: string;
 }

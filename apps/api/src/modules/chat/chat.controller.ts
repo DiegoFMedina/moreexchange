@@ -1,5 +1,4 @@
 // PATH: apps/api/src/modules/chat/chat.controller.ts
-// DESC: Endpoints públicos del chat de soporte — accesibles sin autenticación para los clientes desde los tótems
 
 import {
   Body,
@@ -15,6 +14,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ChatService } from './chat.service';
 import { CreateSessionDto } from './dto/create-session.dto';
+import { FillTransferDataDto } from './dto/update-session.dto';
 
 @ApiTags('chat')
 @Controller('chat')
@@ -49,6 +49,12 @@ export class ChatController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return this.chatService.addClientMessageWithAttachments(token, content, files ?? []);
+  }
+
+  @Post('sessions/:token/transfer-data')
+  @ApiOperation({ summary: 'Cliente llena el formulario de devolución' })
+  fillTransferData(@Param('token') token: string, @Body() dto: FillTransferDataDto) {
+    return this.chatService.fillTransferData(token, dto);
   }
 
   @Get('totems/:id')
