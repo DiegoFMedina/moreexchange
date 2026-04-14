@@ -1,5 +1,5 @@
 // PATH: apps/web/app/(public)/page.tsx
-// DESC: Landing page principal — Hero, Tasas en vivo, Cómo funciona, Calculadora, Por qué, Footer
+// DESC: Landing page principal — tema claro, secciones con fondos alternados blanco/gris
 
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -18,17 +18,11 @@ export default function HomePage() {
       <Navbar />
       <main className="overflow-x-clip w-full max-w-full">
         <HeroSection />
-        <div className="h-px bg-white/[0.06]" aria-hidden />
         <GlobeBidirectionalSection />
-        <div className="h-px bg-white/[0.06]" aria-hidden />
         <HowItWorksSection />
-        <div className="h-px bg-white/[0.06]" aria-hidden />
         <CalculatorSection />
-        <div className="h-px bg-white/[0.06]" aria-hidden />
         <WhyUsSection />
-        <div className="h-px bg-white/[0.06]" aria-hidden />
         <LocationsSection />
-        <div className="h-px bg-white/[0.06]" aria-hidden />
         <Footer />
       </main>
     </>

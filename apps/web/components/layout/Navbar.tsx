@@ -1,5 +1,5 @@
 // PATH: apps/web/components/layout/Navbar.tsx
-// DESC: Navbar transparente sobre hero, con blur al hacer scroll, logo More Exchange y CTA; muestra sesión si está logueado
+// DESC: Navbar blanca con blur al scroll, logo More Exchange, estilo Wise/Global66 — tema claro
 
 'use client';
 
@@ -31,25 +31,17 @@ export function Navbar() {
       initial={{ y: -16, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[#06080f]/95 border-b border-[#1c2240]'
-          : 'bg-transparent'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white border-b ${
+        scrolled ? 'shadow-nav border-[#E2E5F1]' : 'border-transparent'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group shrink-0 min-w-0">
           <div className="w-8 h-8 relative">
-            <Image
-              src="/toro.png"
-              alt="More Exchange"
-              fill
-              className="object-contain"
-              priority
-            />
+            <Image src="/toro.png" alt="More Exchange" fill className="object-contain" priority />
           </div>
-          <span className="font-display font-bold text-[15px] text-text-primary hidden sm:block tracking-tight">
+          <span className="font-display font-bold text-[15px] text-[#243a85] hidden sm:block tracking-tight">
             More Exchange
           </span>
         </Link>
@@ -60,28 +52,28 @@ export function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-[14px] font-sans text-text-secondary hover:text-text-primary transition-colors duration-150"
+              className="text-[14px] font-sans text-[#5C6489] hover:text-[#243a85] transition-colors duration-150"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* CTA — espacio a la derecha en móvil para no pegar al borde */}
+        {/* CTA */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {currentUser ? (
             <>
               <button
                 type="button"
                 onClick={() => logout.mutate()}
-                className="text-[14px] font-sans text-text-secondary hover:text-text-primary transition-colors hidden md:block disabled:opacity-50"
+                className="text-[14px] font-sans text-[#5C6489] hover:text-[#243a85] transition-colors hidden md:block disabled:opacity-50"
                 disabled={logout.isPending}
               >
                 Cerrar sesión
               </button>
               <Link
                 href={currentUser.role === 'ADMIN' ? '/admin' : '/exchange'}
-                className="py-2 px-3 sm:px-4 text-[12px] sm:text-[13px] font-sans font-medium border border-accent text-accent rounded-md hover:bg-accent hover:text-background transition-all duration-150 whitespace-nowrap"
+                className="py-2 px-3 sm:px-5 text-[12px] sm:text-[13px] font-sans font-semibold bg-[#2458F5] text-white rounded-lg hover:bg-[#1A3FBF] transition-all duration-150 whitespace-nowrap shadow-sm"
               >
                 {currentUser.role === 'ADMIN' ? 'Panel admin' : 'Cambiar ahora'}
               </Link>
@@ -90,13 +82,13 @@ export function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-[14px] font-sans text-text-secondary hover:text-text-primary transition-colors hidden md:block"
+                className="text-[14px] font-sans text-[#5C6489] hover:text-[#243a85] transition-colors hidden md:block"
               >
                 Iniciar sesión
               </Link>
               <Link
                 href="/exchange"
-                className="py-2 px-3 sm:px-4 text-[12px] sm:text-[13px] font-sans font-medium border border-accent text-accent rounded-md hover:bg-accent hover:text-background transition-all duration-150 whitespace-nowrap"
+                className="py-2 px-3 sm:px-5 text-[12px] sm:text-[13px] font-sans font-semibold bg-[#2458F5] text-white rounded-lg hover:bg-[#1A3FBF] transition-all duration-150 whitespace-nowrap shadow-sm"
               >
                 Cambiar ahora
               </Link>

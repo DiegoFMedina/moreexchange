@@ -1,15 +1,15 @@
 // PATH: apps/web/app/layout.tsx
-// DESC: Layout raíz de Next.js 14 — carga fuentes Syne y DM Sans, configura React Query y metadatos globales
+// DESC: Layout raíz — Montserrat (display, brand manual) + DM Sans (body), tema claro More Exchange
 
 import type { Metadata, Viewport } from 'next';
-import { Syne, DM_Sans } from 'next/font/google';
+import { Montserrat, DM_Sans } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/layout/Providers';
 
-const syne = Syne({
+const montserrat = Montserrat({
   subsets: ['latin'],
-  variable: '--font-syne',
-  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-montserrat',
+  weight: ['300', '400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
@@ -46,16 +46,19 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#06080f',
+  themeColor: '#FFFFFF',
   width: 'device-width',
   initialScale: 1,
-  // Evita que el navegador calcule un viewport más ancho que la pantalla
   maximumScale: 5,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${syne.variable} ${dmSans.variable}`} suppressHydrationWarning>
+    <html
+      lang="es"
+      className={`${montserrat.variable} ${dmSans.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-screen min-w-0 max-w-[100vw] bg-background text-text-primary antialiased">
         <div className="min-h-screen w-full min-w-0 max-w-full [overflow-x:clip]">
           <Providers>{children}</Providers>

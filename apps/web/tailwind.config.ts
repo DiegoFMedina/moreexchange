@@ -1,5 +1,5 @@
 // PATH: apps/web/tailwind.config.ts
-// DESC: Configuración Tailwind CSS con paleta "More Exchange — azul profundo" y tipografía Syne + DM Sans
+// DESC: Configuración Tailwind CSS — tema claro More Exchange con paleta del manual de marca MoreGiros 2024
 import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
 
@@ -21,41 +21,56 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        display: ['var(--font-syne)', ...fontFamily.sans],
+        display: ['var(--font-montserrat)', ...fontFamily.sans],
         sans: ['var(--font-dm-sans)', ...fontFamily.sans],
         mono: ['var(--font-mono)', ...fontFamily.mono],
       },
       colors: {
-        background: '#06080f',
+        background: '#FFFFFF',
+        'background-alt': '#F5F7FE',
         surface: {
-          DEFAULT: '#0c0f1a',
-          card: '#111629',
+          DEFAULT: '#FFFFFF',
+          card: '#FFFFFF',
+          muted: '#F0F2FA',
         },
         border: {
-          DEFAULT: '#1c2240',
-          emphasis: '#2a3460',
+          DEFAULT: '#E2E5F1',
+          emphasis: '#C8CDE0',
         },
         text: {
-          primary: '#eef0f8',
-          secondary: '#6b7499',
+          primary: '#1B2141',
+          secondary: '#5C6489',
+          muted: '#8B92B0',
+        },
+        brand: {
+          DEFAULT: '#243a85',
+          medium: '#4b579b',
+          light: '#8c8fc0',
+          pale: '#E8EAF6',
         },
         accent: {
-          DEFAULT: '#00b4d8',
-          hover: '#00d4ff',
-          glow: 'rgba(0, 180, 216, 0.12)',
+          DEFAULT: '#00AEEF',
+          hover: '#0095D0',
+          glow: 'rgba(0, 174, 239, 0.10)',
         },
-        positive: '#00c896',
-        negative: '#ff4d6a',
+        cta: {
+          DEFAULT: '#2458F5',
+          hover: '#1A3FBF',
+        },
+        positive: '#059669',
+        negative: '#DC2626',
         'blue-mid': '#1a3a8f',
-        brand: {
-          DEFAULT: '#00b4d8',
-          hover: '#00d4ff',
-        },
       },
       borderRadius: {
-        lg: '8px',
-        md: '6px',
+        lg: '12px',
+        md: '8px',
         sm: '4px',
+      },
+      boxShadow: {
+        card: '0 1px 3px rgba(36,58,133,0.06), 0 4px 16px rgba(36,58,133,0.04)',
+        'card-hover': '0 4px 12px rgba(36,58,133,0.10), 0 8px 32px rgba(36,58,133,0.06)',
+        nav: '0 1px 3px rgba(0,0,0,0.05)',
+        widget: '0 2px 8px rgba(36,58,133,0.08), 0 8px 32px rgba(36,58,133,0.06)',
       },
       keyframes: {
         'accordion-down': {
@@ -67,8 +82,8 @@ const config: Config = {
           to: { height: '0' },
         },
         'rate-flash': {
-          '0%': { color: '#00b4d8' },
-          '100%': { color: '#eef0f8' },
+          '0%': { color: '#2458F5' },
+          '100%': { color: '#1B2141' },
         },
       },
       animation: {

@@ -1,5 +1,5 @@
 // PATH: apps/web/components/landing/LocationsSection.tsx
-// DESC: Módulo "Red de atención" — sucursales y tótems 24/7, basado en moreexchange_sucursales_estrategia.html
+// DESC: Módulo "Red de atención" — sucursales y tótems, tema claro con cards blancas y sombras
 
 'use client';
 
@@ -268,45 +268,46 @@ export function LocationsSection() {
     setModalItem(item);
     setModalType(kind);
   };
-
   const closeModal = () => {
     setModalItem(null);
     setModalType(null);
   };
-
   const isOpen = (item: Sucursal | Totem) => {
     if ('open' in item) return item.open;
     if ('is24' in item) return item.is24;
     return true;
   };
-
   const hoursFirst = (hours: string) => hours.split('·')[0].trim();
 
   return (
-    <section id="sucursales" className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#08122B] font-sans text-white overflow-x-hidden">
+    <section
+      id="sucursales"
+      className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#F5F7FE] font-sans overflow-x-hidden"
+    >
       <div className="max-w-5xl mx-auto">
         <div className="text-center md:text-left flex flex-col items-center md:items-start">
           <motion.span
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.05 }}
-            className="inline-flex items-center gap-2 bg-[rgba(0,194,255,0.1)] border border-[rgba(0,194,255,0.25)] text-[#00C2FF] text-[10px] tracking-[0.14em] uppercase py-1 px-3 rounded-full mb-4 font-medium"
+            className="inline-flex items-center gap-2 bg-[#E8EAF6] border border-[#C8CDE0] text-[#243a85] text-[10px] tracking-[0.14em] uppercase py-1 px-3 rounded-full mb-4 font-medium"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] animate-pulse-dot" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2458F5] animate-pulse-dot" />
             Red de atención
           </motion.span>
           <motion.h2
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.15 }}
-            className="font-display text-[28px] sm:text-[36px] font-extrabold tracking-tight text-white mb-2"
+            className="font-display text-[28px] sm:text-[36px] font-extrabold tracking-tight text-[#1B2141] mb-2"
           >
-            Siempre <span className="text-[#00C2FF]">cerca de ti</span>
+            Siempre <span className="text-[#2458F5]">cerca de ti</span>
           </motion.h2>
           <motion.p
             {...fadeUp}
             transition={{ ...fadeUp.transition, delay: 0.25 }}
-            className="text-[14px] text-white/45 leading-relaxed max-w-[520px] mb-8"
+            className="text-[14px] text-[#5C6489] leading-relaxed max-w-[520px] mb-8"
           >
-            8 sucursales con atención personalizada y 10 tótems de autoservicio disponibles las 24 horas. Santiago, Valparaíso e Iquique.
+            8 sucursales con atención personalizada y 10 tótems de autoservicio disponibles las 24
+            horas. Santiago, Valparaíso e Iquique.
           </motion.p>
         </div>
 
@@ -314,20 +315,20 @@ export function LocationsSection() {
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.3 }}
-          className="flex gap-0 bg-[#0F1E45] border border-white/[0.06] rounded-[10px] p-1 w-fit mb-9"
+          className="flex gap-0 bg-white border border-[#E2E5F1] rounded-[10px] p-1 w-fit mb-9 shadow-sm"
         >
           <button
             type="button"
             onClick={() => setTab('suc')}
             className={`flex items-center gap-2 px-7 py-2.5 rounded-lg text-[13px] font-sans transition-all ${
-              tab === 'suc' ? 'bg-[#2458F5] text-white font-medium' : 'bg-transparent text-white/45 hover:text-white'
+              tab === 'suc'
+                ? 'bg-[#2458F5] text-white font-medium shadow-sm'
+                : 'bg-transparent text-[#5C6489] hover:text-[#243a85]'
             }`}
           >
             Sucursales
             <span
-              className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-                tab === 'suc' ? 'bg-white/20 text-white' : 'bg-white/15 text-white/70'
-              }`}
+              className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${tab === 'suc' ? 'bg-white/20 text-white' : 'bg-[#E8EAF6] text-[#243a85]'}`}
             >
               {SUC.length}
             </span>
@@ -336,14 +337,14 @@ export function LocationsSection() {
             type="button"
             onClick={() => setTab('tot')}
             className={`flex items-center gap-2 px-7 py-2.5 rounded-lg text-[13px] font-sans transition-all ${
-              tab === 'tot' ? 'bg-[#2458F5] text-white font-medium' : 'bg-transparent text-white/45 hover:text-white'
+              tab === 'tot'
+                ? 'bg-[#2458F5] text-white font-medium shadow-sm'
+                : 'bg-transparent text-[#5C6489] hover:text-[#243a85]'
             }`}
           >
             Tótems 24/7
             <span
-              className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-                tab === 'tot' ? 'bg-white/20 text-white' : 'bg-white/15 text-white/70'
-              }`}
+              className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${tab === 'tot' ? 'bg-white/20 text-white' : 'bg-[#E8EAF6] text-[#243a85]'}`}
             >
               {TOT.length}
             </span>
@@ -365,11 +366,17 @@ export function LocationsSection() {
                   onClick={() => setSucFilter(f)}
                   className={`px-4 py-1.5 rounded-full border text-[12px] font-sans transition-all ${
                     sucFilter === f
-                      ? 'bg-[#162254] border-[rgba(0,194,255,0.3)] text-white'
-                      : 'border-white/[0.06] bg-transparent text-white/45 hover:border-white/20 hover:text-white'
+                      ? 'bg-[#2458F5]/10 border-[#2458F5]/30 text-[#2458F5] font-medium'
+                      : 'border-[#E2E5F1] bg-white text-[#5C6489] hover:border-[#C8CDE0] hover:text-[#243a85]'
                   }`}
                 >
-                  {f === 'all' ? 'Todas' : f === 'valpo' ? 'Valparaíso' : f === 'norte' ? 'Norte' : 'Santiago'}
+                  {f === 'all'
+                    ? 'Todas'
+                    : f === 'valpo'
+                      ? 'Valparaíso'
+                      : f === 'norte'
+                        ? 'Norte'
+                        : 'Santiago'}
                 </button>
               ))}
             </>
@@ -383,11 +390,17 @@ export function LocationsSection() {
                   onClick={() => setTotFilter(f)}
                   className={`px-4 py-1.5 rounded-full border text-[12px] font-sans transition-all ${
                     totFilter === f
-                      ? 'bg-[#162254] border-[rgba(0,194,255,0.3)] text-white'
-                      : 'border-white/[0.06] bg-transparent text-white/45 hover:border-white/20 hover:text-white'
+                      ? 'bg-[#2458F5]/10 border-[#2458F5]/30 text-[#2458F5] font-medium'
+                      : 'border-[#E2E5F1] bg-white text-[#5C6489] hover:border-[#C8CDE0] hover:text-[#243a85]'
                   }`}
                 >
-                  {f === 'all' ? 'Todos' : f === '24h' ? '24 horas' : f === 'mall' ? 'Malls' : 'Aeropuerto'}
+                  {f === 'all'
+                    ? 'Todos'
+                    : f === '24h'
+                      ? '24 horas'
+                      : f === 'mall'
+                        ? 'Malls'
+                        : 'Aeropuerto'}
                 </button>
               ))}
             </>
@@ -409,9 +422,9 @@ export function LocationsSection() {
               tabIndex={0}
               onClick={() => openModal(item, tab)}
               onKeyDown={(e) => e.key === 'Enter' && openModal(item, tab)}
-              className="bg-[#0F1E45] border border-white/[0.09] rounded-xl overflow-hidden cursor-pointer transition-all duration-200 hover:border-[rgba(0,194,255,0.3)] hover:-translate-y-0.5"
+              className="bg-white border border-[#E2E5F1] rounded-xl overflow-hidden cursor-pointer transition-all duration-200 shadow-card hover:shadow-card-hover hover:-translate-y-0.5"
             >
-              <div className="relative w-full h-[140px] bg-[#162254]">
+              <div className="relative w-full h-[140px] bg-[#F0F2FA]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.img}
@@ -424,38 +437,39 @@ export function LocationsSection() {
                   }}
                 />
                 <div
-                  className="absolute inset-0 hidden items-center justify-center text-[32px] bg-[#162254]"
+                  className="absolute inset-0 hidden items-center justify-center text-[32px] bg-[#F0F2FA]"
                   style={{ display: 'none' }}
                 >
                   {tab === 'tot' ? '🏧' : '🏢'}
                 </div>
               </div>
               <div className="p-5">
-                <div className="flex items-center gap-2 text-[10px] tracking-wider uppercase text-[#00C2FF] font-medium mb-1.5">
+                <div className="flex items-center gap-2 text-[10px] tracking-wider uppercase text-[#2458F5] font-medium mb-1.5">
                   {tab === 'suc' ? 'Sucursal' : 'Tótem autoservicio'}
-                  {(tab === 'suc' && (item as Sucursal).totem) || (tab === 'tot' && (item as Totem).is24) ? (
-                    <span className="bg-[rgba(0,229,160,0.1)] text-[#00E5A0] border border-[rgba(0,229,160,0.25)] px-2 py-0.5 rounded-lg text-[10px] tracking-wide">
+                  {(tab === 'suc' && (item as Sucursal).totem) ||
+                  (tab === 'tot' && (item as Totem).is24) ? (
+                    <span className="bg-[#059669]/10 text-[#059669] border border-[#059669]/25 px-2 py-0.5 rounded-lg text-[10px] tracking-wide">
                       24/7
                     </span>
                   ) : null}
                 </div>
-                <h4 className="text-[15px] font-medium text-white mb-1.5 leading-snug">{item.name}</h4>
-                <p className="text-[12px] text-white/45 mb-3 leading-snug">{item.addr}</p>
-                <div className="flex items-center gap-1.5 text-[11px] text-white/45 mb-4">
+                <h4 className="text-[15px] font-medium text-[#1B2141] mb-1.5 leading-snug">
+                  {item.name}
+                </h4>
+                <p className="text-[12px] text-[#5C6489] mb-3 leading-snug">{item.addr}</p>
+                <div className="flex items-center gap-1.5 text-[11px] text-[#5C6489] mb-4">
                   <span
-                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${
-                      isOpen(item) ? 'bg-[#00E5A0]' : 'bg-[#FF5C5C]'
-                    }`}
+                    className={`w-1.5 h-1.5 rounded-full shrink-0 ${isOpen(item) ? 'bg-[#059669]' : 'bg-[#DC2626]'}`}
                   />
                   {hoursFirst(item.hours)}
                 </div>
-                <div className="flex gap-2 border-t border-white/[0.06] pt-3">
+                <div className="flex gap-2 border-t border-[#E2E5F1] pt-3">
                   <a
                     href={item.map}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1 text-center py-2 rounded-md border border-white/15 text-white/45 hover:border-white/30 hover:text-white text-[12px] transition-colors"
+                    className="flex-1 text-center py-2 rounded-md border border-[#E2E5F1] text-[#5C6489] hover:border-[#C8CDE0] hover:text-[#243a85] text-[12px] transition-colors"
                   >
                     Ver mapa
                   </a>
@@ -463,7 +477,7 @@ export function LocationsSection() {
                     <a
                       href={`tel:${item.phone}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="flex-1 text-center py-2 rounded-md bg-[#2458F5] text-white text-[12px] hover:bg-[#1A3FBF] transition-colors"
+                      className="flex-1 text-center py-2 rounded-md bg-[#2458F5] text-white text-[12px] hover:bg-[#1A3FBF] transition-colors shadow-sm"
                     >
                       Llamar
                     </a>
@@ -474,7 +488,7 @@ export function LocationsSection() {
                         e.stopPropagation();
                         openModal(item, tab);
                       }}
-                      className="flex-1 py-2 rounded-md bg-[#2458F5] text-white text-[12px] hover:bg-[#1A3FBF] transition-colors"
+                      className="flex-1 py-2 rounded-md bg-[#2458F5] text-white text-[12px] hover:bg-[#1A3FBF] transition-colors shadow-sm"
                     >
                       Ver detalle
                     </button>
@@ -485,29 +499,32 @@ export function LocationsSection() {
           ))}
         </motion.div>
 
-        {/* Ver todas las ubicaciones */}
-        <motion.div
-          {...fadeUp}
-          transition={{ ...fadeUp.transition, delay: 0.4 }}
-          className="mt-6"
-        >
+        {/* Ver todas */}
+        <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.4 }} className="mt-6">
           <Link
             href="/sucursales"
-            className="flex items-center justify-between bg-[#0F1E45] border border-white/[0.09] rounded-xl p-5 transition-colors hover:border-[rgba(0,194,255,0.3)]"
+            className="flex items-center justify-between bg-white border border-[#E2E5F1] rounded-xl p-5 transition-all shadow-card hover:shadow-card-hover"
           >
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-lg bg-[rgba(0,194,255,0.1)] border border-[rgba(0,194,255,0.25)] flex items-center justify-center">
-                <svg viewBox="0 0 18 18" className="w-[18px] h-[18px] stroke-[#00C2FF] fill-none stroke-[1.5]">
+              <div className="w-10 h-10 rounded-lg bg-[#E8EAF6] border border-[#C8CDE0] flex items-center justify-center">
+                <svg
+                  viewBox="0 0 18 18"
+                  className="w-[18px] h-[18px] stroke-[#2458F5] fill-none stroke-[1.5]"
+                >
                   <circle cx="9" cy="9" r="7" />
                   <path d="M9 5v4l3 2" />
                 </svg>
               </div>
               <div>
-                <div className="text-[15px] font-medium text-white">Ver todas las ubicaciones con mapa interactivo</div>
-                <div className="text-[12px] text-white/45 mt-0.5">18 puntos de atención · Horarios · Teléfonos · Cómo llegar</div>
+                <div className="text-[15px] font-medium text-[#1B2141]">
+                  Ver todas las ubicaciones con mapa interactivo
+                </div>
+                <div className="text-[12px] text-[#5C6489] mt-0.5">
+                  18 puntos de atención · Horarios · Teléfonos · Cómo llegar
+                </div>
               </div>
             </div>
-            <span className="text-[#00C2FF] text-xl">›</span>
+            <span className="text-[#2458F5] text-xl">›</span>
           </Link>
         </motion.div>
       </div>
@@ -515,14 +532,14 @@ export function LocationsSection() {
       {/* Modal */}
       {modalItem && modalType && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#08122B]/90"
+          className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/40 backdrop-blur-sm"
           onClick={(e) => e.target === e.currentTarget && closeModal()}
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
         >
           <div
-            className="bg-[#0F1E45] border border-white/10 rounded-2xl w-full max-w-[680px] max-h-[85vh] overflow-y-auto relative"
+            className="bg-white border border-[#E2E5F1] rounded-2xl w-full max-w-[680px] max-h-[85vh] overflow-y-auto relative shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -534,7 +551,7 @@ export function LocationsSection() {
               ×
             </button>
             <div
-              className="w-full h-[200px] bg-[#162254] rounded-t-2xl bg-cover bg-center"
+              className="w-full h-[200px] bg-[#F0F2FA] rounded-t-2xl bg-cover bg-center"
               style={{ backgroundImage: modalItem.img ? `url(${modalItem.img})` : undefined }}
             >
               {!modalItem.img && (
@@ -544,34 +561,45 @@ export function LocationsSection() {
               )}
             </div>
             <div className="p-7">
-              <div className="text-[10px] tracking-widest uppercase text-[#00C2FF] font-medium mb-2">
+              <div className="text-[10px] tracking-widest uppercase text-[#2458F5] font-medium mb-2">
                 {modalType === 'suc' ? 'Sucursal' : 'Tótem autoservicio'}
               </div>
-              {(modalType === 'suc' && (modalItem as Sucursal).totem) || (modalType === 'tot' && (modalItem as Totem).is24) ? (
-                <div className="inline-flex items-center gap-1.5 bg-[rgba(0,229,160,0.1)] border border-[rgba(0,229,160,0.3)] text-[#00E5A0] px-3 py-1.5 rounded-full text-[11px] font-medium mb-4">
+              {(modalType === 'suc' && (modalItem as Sucursal).totem) ||
+              (modalType === 'tot' && (modalItem as Totem).is24) ? (
+                <div className="inline-flex items-center gap-1.5 bg-[#059669]/10 border border-[#059669]/25 text-[#059669] px-3 py-1.5 rounded-full text-[11px] font-medium mb-4">
                   ⚡ Tótem autoservicio 24/7
                 </div>
               ) : null}
-              <h3 id="modal-title" className="font-display text-2xl font-bold text-white mb-1.5">
+              <h3
+                id="modal-title"
+                className="font-display text-2xl font-bold text-[#1B2141] mb-1.5"
+              >
                 {modalItem.name}
               </h3>
-              <p className="text-white/45 text-[14px] mb-5">{modalItem.addr}</p>
+              <p className="text-[#5C6489] text-[14px] mb-5">{modalItem.addr}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-                <div className="bg-[#162254] rounded-lg p-4">
-                  <div className="text-[10px] tracking-wider uppercase text-white/45 font-medium mb-1.5">Horarios</div>
-                  <div className="text-[13px] text-white leading-snug">{modalItem.hours}</div>
+                <div className="bg-[#F5F7FE] rounded-lg p-4">
+                  <div className="text-[10px] tracking-wider uppercase text-[#8B92B0] font-medium mb-1.5">
+                    Horarios
+                  </div>
+                  <div className="text-[13px] text-[#1B2141] leading-snug">{modalItem.hours}</div>
                 </div>
-                <div className="bg-[#162254] rounded-lg p-4">
-                  <div className="text-[10px] tracking-wider uppercase text-white/45 font-medium mb-1.5">Contacto</div>
-                  <div className="text-[13px] text-white leading-snug whitespace-pre-line">
+                <div className="bg-[#F5F7FE] rounded-lg p-4">
+                  <div className="text-[10px] tracking-wider uppercase text-[#8B92B0] font-medium mb-1.5">
+                    Contacto
+                  </div>
+                  <div className="text-[13px] text-[#1B2141] leading-snug whitespace-pre-line">
                     {modalItem.contact.split('\n').map((line, i) => (
                       <span key={i}>
                         {line.includes('@') ? (
-                          <a href={`mailto:${line}`} className="text-[#00C2FF] no-underline">
+                          <a href={`mailto:${line}`} className="text-[#2458F5] no-underline">
                             {line}
                           </a>
                         ) : line.match(/^\+?[\d\s]+$/) ? (
-                          <a href={`tel:${line.replace(/\s/g, '')}`} className="text-[#00C2FF] no-underline">
+                          <a
+                            href={`tel:${line.replace(/\s/g, '')}`}
+                            className="text-[#2458F5] no-underline"
+                          >
                             {line}
                           </a>
                         ) : (
@@ -588,7 +616,7 @@ export function LocationsSection() {
                   href={modalItem.map}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 text-center py-3 rounded-lg bg-[#2458F5] text-white text-[14px] font-medium hover:bg-[#1A3FBF] transition-colors"
+                  className="flex-1 text-center py-3 rounded-lg bg-[#2458F5] text-white text-[14px] font-medium hover:bg-[#1A3FBF] transition-colors shadow-sm"
                 >
                   Ver en mapa →
                 </a>
@@ -596,7 +624,7 @@ export function LocationsSection() {
                   href={modalItem.map}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 text-center py-3 rounded-lg border border-white/20 text-white text-[14px] hover:bg-white/5 transition-colors"
+                  className="flex-1 text-center py-3 rounded-lg border border-[#E2E5F1] text-[#1B2141] text-[14px] hover:bg-[#F5F7FE] transition-colors"
                 >
                   Cómo llegar
                 </a>

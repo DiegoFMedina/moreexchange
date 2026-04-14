@@ -1,5 +1,5 @@
 // PATH: apps/web/components/landing/GlobeBidirectionalSection.tsx
-// DESC: Módulo "Red de envíos globales" — globo con rutas bidireccionales Chile ↔ mundo (moreexchange_globe_bidireccional.html)
+// DESC: Módulo "Red de envíos globales" — globo con rutas bidireccionales, adaptado a tema claro
 
 'use client';
 
@@ -13,16 +13,96 @@ const CY = H / 2;
 const R = 188;
 
 const PINS = [
-  { flag: '🇺🇸', name: 'Estados Unidos', cur: 'USD', ang: -62, r: 218, colorIn: 'rgba(0,194,255,0.9)', colorOut: 'rgba(0,229,160,0.85)' },
-  { flag: '🇪🇺', name: 'Europa', cur: 'EUR', ang: -22, r: 213, colorIn: 'rgba(0,194,255,0.85)', colorOut: 'rgba(0,229,160,0.8)' },
-  { flag: '🇬🇧', name: 'Reino Unido', cur: 'GBP', ang: 18, r: 216, colorIn: 'rgba(0,194,255,0.8)', colorOut: 'rgba(0,229,160,0.75)' },
-  { flag: '🇨🇳', name: 'China', cur: 'CNY', ang: 58, r: 220, colorIn: 'rgba(255,184,0,0.85)', colorOut: 'rgba(255,184,0,0.7)' },
-  { flag: '🇧🇷', name: 'Brasil', cur: 'BRL', ang: 102, r: 214, colorIn: 'rgba(255,184,0,0.8)', colorOut: 'rgba(255,184,0,0.65)' },
-  { flag: '🇻🇪', name: 'Venezuela', cur: 'VES', ang: 142, r: 212, colorIn: 'rgba(0,229,160,0.85)', colorOut: 'rgba(0,194,255,0.8)' },
-  { flag: '🇨🇴', name: 'Colombia', cur: 'COP', ang: 178, r: 215, colorIn: 'rgba(0,229,160,0.9)', colorOut: 'rgba(0,194,255,0.85)' },
-  { flag: '🇵🇪', name: 'Perú', cur: 'PEN', ang: -178, r: 213, colorIn: 'rgba(0,229,160,0.85)', colorOut: 'rgba(0,194,255,0.8)' },
-  { flag: '🇦🇷', name: 'Argentina', cur: 'ARS', ang: -142, r: 218, colorIn: 'rgba(0,229,160,0.8)', colorOut: 'rgba(0,194,255,0.75)' },
-  { flag: '🇧🇴', name: 'Bolivia', cur: 'BOB', ang: -102, r: 214, colorIn: 'rgba(0,229,160,0.8)', colorOut: 'rgba(0,194,255,0.75)' },
+  {
+    flag: '🇺🇸',
+    name: 'Estados Unidos',
+    cur: 'USD',
+    ang: -62,
+    r: 218,
+    colorIn: 'rgba(36,88,245,0.9)',
+    colorOut: 'rgba(5,150,105,0.85)',
+  },
+  {
+    flag: '🇪🇺',
+    name: 'Europa',
+    cur: 'EUR',
+    ang: -22,
+    r: 213,
+    colorIn: 'rgba(36,88,245,0.85)',
+    colorOut: 'rgba(5,150,105,0.8)',
+  },
+  {
+    flag: '🇬🇧',
+    name: 'Reino Unido',
+    cur: 'GBP',
+    ang: 18,
+    r: 216,
+    colorIn: 'rgba(36,88,245,0.8)',
+    colorOut: 'rgba(5,150,105,0.75)',
+  },
+  {
+    flag: '🇨🇳',
+    name: 'China',
+    cur: 'CNY',
+    ang: 58,
+    r: 220,
+    colorIn: 'rgba(255,160,0,0.85)',
+    colorOut: 'rgba(255,160,0,0.7)',
+  },
+  {
+    flag: '🇧🇷',
+    name: 'Brasil',
+    cur: 'BRL',
+    ang: 102,
+    r: 214,
+    colorIn: 'rgba(255,160,0,0.8)',
+    colorOut: 'rgba(255,160,0,0.65)',
+  },
+  {
+    flag: '🇻🇪',
+    name: 'Venezuela',
+    cur: 'VES',
+    ang: 142,
+    r: 212,
+    colorIn: 'rgba(5,150,105,0.85)',
+    colorOut: 'rgba(36,88,245,0.8)',
+  },
+  {
+    flag: '🇨🇴',
+    name: 'Colombia',
+    cur: 'COP',
+    ang: 178,
+    r: 215,
+    colorIn: 'rgba(5,150,105,0.9)',
+    colorOut: 'rgba(36,88,245,0.85)',
+  },
+  {
+    flag: '🇵🇪',
+    name: 'Perú',
+    cur: 'PEN',
+    ang: -178,
+    r: 213,
+    colorIn: 'rgba(5,150,105,0.85)',
+    colorOut: 'rgba(36,88,245,0.8)',
+  },
+  {
+    flag: '🇦🇷',
+    name: 'Argentina',
+    cur: 'ARS',
+    ang: -142,
+    r: 218,
+    colorIn: 'rgba(5,150,105,0.8)',
+    colorOut: 'rgba(36,88,245,0.75)',
+  },
+  {
+    flag: '🇧🇴',
+    name: 'Bolivia',
+    cur: 'BOB',
+    ang: -102,
+    r: 214,
+    colorIn: 'rgba(5,150,105,0.8)',
+    colorOut: 'rgba(36,88,245,0.75)',
+  },
 ];
 
 function angRad(a: number) {
@@ -64,7 +144,6 @@ export function GlobeBidirectionalSection() {
     if (!scene) return;
     const sceneW = scene.offsetWidth;
     const sceneH = scene.offsetHeight;
-    // Si el contenedor aún no tiene dimensiones, no posicionar (evita overflow con fallback 500)
     if (!sceneW || !sceneH) return;
     const scaleX = sceneW / W;
     const scaleY = sceneH / H;
@@ -85,7 +164,6 @@ export function GlobeBidirectionalSection() {
       const dist = Math.sqrt((lx - ax) ** 2 + (ly - ay) ** 2);
       const stemH = Math.max(10, dist - ph / 2 - 4);
       stem.style.height = `${stemH}px`;
-      // Clamp left so pins never exceed container width
       const leftRaw = ax - pw / 2;
       const leftClamped = Math.max(0, Math.min(leftRaw, sceneW - pw));
       el.style.left = `${leftClamped}px`;
@@ -97,7 +175,6 @@ export function GlobeBidirectionalSection() {
     positionPins();
   }, [positionPins]);
 
-  // Re-posicionar si el contenedor cambia de tamaño (orientación o resize)
   useEffect(() => {
     const scene = sceneRef.current;
     if (!scene) return;
@@ -135,7 +212,7 @@ export function GlobeBidirectionalSection() {
       cpx: number,
       cpy: number,
       bx: number,
-      by: number
+      by: number,
     ) {
       const mt = 1 - t;
       return {
@@ -144,7 +221,14 @@ export function GlobeBidirectionalSection() {
       };
     }
 
-    function arrowhead(fromX: number, fromY: number, toX: number, toY: number, color: string, sz = 7) {
+    function arrowhead(
+      fromX: number,
+      fromY: number,
+      toX: number,
+      toY: number,
+      color: string,
+      sz = 7,
+    ) {
       if (!ctx) return;
       const ang = Math.atan2(toY - fromY, toX - fromX);
       ctx.save();
@@ -185,24 +269,27 @@ export function GlobeBidirectionalSection() {
       if (!ctx) return;
       ctx.clearRect(0, 0, W, H);
 
+      // Outer glow — lighter for white background
       const og = ctx.createRadialGradient(CX, CY, R * 0.8, CX, CY, R * 1.22);
-      og.addColorStop(0, 'rgba(36,88,245,0)');
-      og.addColorStop(0.85, 'rgba(36,88,245,0.07)');
-      og.addColorStop(1, 'rgba(0,194,255,0.15)');
+      og.addColorStop(0, 'rgba(36,58,133,0)');
+      og.addColorStop(0.85, 'rgba(36,58,133,0.04)');
+      og.addColorStop(1, 'rgba(36,88,245,0.08)');
       ctx.beginPath();
       ctx.arc(CX, CY, R * 1.22, 0, Math.PI * 2);
       ctx.fillStyle = og;
       ctx.fill();
 
+      // Globe body — brand blue gradient
       const gb = ctx.createRadialGradient(CX - 55, CY - 65, 15, CX, CY, R);
-      gb.addColorStop(0, '#1E4090');
-      gb.addColorStop(0.45, '#0D2460');
-      gb.addColorStop(1, '#050F28');
+      gb.addColorStop(0, '#4b579b');
+      gb.addColorStop(0.45, '#2d4a9e');
+      gb.addColorStop(1, '#1a2d6e');
       ctx.beginPath();
       ctx.arc(CX, CY, R, 0, Math.PI * 2);
       ctx.fillStyle = gb;
       ctx.fill();
 
+      // Grid lines
       ctx.save();
       ctx.beginPath();
       ctx.arc(CX, CY, R, 0, Math.PI * 2);
@@ -223,7 +310,7 @@ export function GlobeBidirectionalSection() {
             first = false;
           } else first = true;
         }
-        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
@@ -243,12 +330,13 @@ export function GlobeBidirectionalSection() {
             first = false;
           } else first = true;
         }
-        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
       ctx.restore();
 
+      // Routes + particles
       PINS.forEach((pin, ri) => {
         const anc = pinAnchorPos(pin.ang);
         const ax = anc.x;
@@ -260,7 +348,7 @@ export function GlobeBidirectionalSection() {
         ctx.beginPath();
         ctx.moveTo(ax, ay);
         ctx.quadraticCurveTo(cpIn.x, cpIn.y, CX, CY);
-        ctx.strokeStyle = pin.colorIn.replace(/[\d.]+\)$/, '0.15)');
+        ctx.strokeStyle = pin.colorIn.replace(/[\d.]+\)$/, '0.2)');
         ctx.lineWidth = 1;
         ctx.setLineDash([3, 6]);
         ctx.stroke();
@@ -269,7 +357,7 @@ export function GlobeBidirectionalSection() {
         ctx.beginPath();
         ctx.moveTo(CX, CY);
         ctx.quadraticCurveTo(cpOut.x, cpOut.y, ax, ay);
-        ctx.strokeStyle = pin.colorOut.replace(/[\d.]+\)$/, '0.15)');
+        ctx.strokeStyle = pin.colorOut.replace(/[\d.]+\)$/, '0.2)');
         ctx.lineWidth = 1;
         ctx.setLineDash([3, 6]);
         ctx.stroke();
@@ -277,11 +365,25 @@ export function GlobeBidirectionalSection() {
 
         const inTip = bezier(0.9, ax, ay, cpIn.x, cpIn.y, CX, CY);
         const inPrev = bezier(0.82, ax, ay, cpIn.x, cpIn.y, CX, CY);
-        arrowhead(inPrev.x, inPrev.y, inTip.x, inTip.y, pin.colorIn.replace(/[\d.]+\)$/, '0.95)'), 8);
+        arrowhead(
+          inPrev.x,
+          inPrev.y,
+          inTip.x,
+          inTip.y,
+          pin.colorIn.replace(/[\d.]+\)$/, '0.95)'),
+          8,
+        );
 
         const outTip = bezier(0.9, CX, CY, cpOut.x, cpOut.y, ax, ay);
         const outPrev = bezier(0.82, CX, CY, cpOut.x, cpOut.y, ax, ay);
-        arrowhead(outPrev.x, outPrev.y, outTip.x, outTip.y, pin.colorOut.replace(/[\d.]+\)$/, '0.95)'), 8);
+        arrowhead(
+          outPrev.x,
+          outPrev.y,
+          outTip.x,
+          outTip.y,
+          pin.colorOut.replace(/[\d.]+\)$/, '0.95)'),
+          8,
+        );
 
         s.inPars.forEach((p: { t: number; spd: number }) => {
           p.t += p.spd;
@@ -304,29 +406,32 @@ export function GlobeBidirectionalSection() {
         });
       });
 
+      // Center pulse
       const pulse = (Math.sin(frame * 0.04) + 1) / 2;
       [
-        [30, 0.05],
-        [22, 0.1],
-        [15, 0.18],
+        [30, 0.06],
+        [22, 0.12],
+        [15, 0.2],
       ].forEach(([r, a]) => {
         ctx.beginPath();
         ctx.arc(CX, CY, (r as number) + pulse * 3, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0,194,255,${a})`;
+        ctx.strokeStyle = `rgba(36,88,245,${a})`;
         ctx.lineWidth = 1;
         ctx.stroke();
       });
 
+      // Atmosphere
       const atm = ctx.createRadialGradient(CX, CY, R * 0.85, CX, CY, R * 1.04);
-      atm.addColorStop(0, 'rgba(0,194,255,0)');
-      atm.addColorStop(0.7, 'rgba(0,194,255,0.04)');
-      atm.addColorStop(1, 'rgba(0,194,255,0.2)');
+      atm.addColorStop(0, 'rgba(36,88,245,0)');
+      atm.addColorStop(0.7, 'rgba(36,88,245,0.03)');
+      atm.addColorStop(1, 'rgba(36,88,245,0.12)');
       ctx.beginPath();
       ctx.arc(CX, CY, R * 1.04, 0, Math.PI * 2);
       ctx.fillStyle = atm;
       ctx.fill();
+
       const sh = ctx.createRadialGradient(CX - 65, CY - 65, 4, CX - 45, CY - 45, R * 0.6);
-      sh.addColorStop(0, 'rgba(255,255,255,0.07)');
+      sh.addColorStop(0, 'rgba(255,255,255,0.12)');
       sh.addColorStop(1, 'rgba(255,255,255,0)');
       ctx.beginPath();
       ctx.arc(CX, CY, R, 0, Math.PI * 2);
@@ -343,27 +448,27 @@ export function GlobeBidirectionalSection() {
   }, [streams]);
 
   return (
-    <section className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#08122B] font-sans text-white overflow-x-hidden w-full min-w-0">
+    <section className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#F5F7FE] font-sans overflow-x-hidden w-full min-w-0">
       <div className="flex flex-col items-center max-w-4xl mx-auto w-full min-w-0">
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.05 }}
-          className="inline-flex items-center gap-2 bg-[rgba(0,194,255,0.1)] border border-[rgba(0,194,255,0.25)] text-[#00C2FF] text-[10px] tracking-[0.14em] uppercase py-1 px-3 rounded-full mb-4 font-medium"
+          className="inline-flex items-center gap-2 bg-[#E8EAF6] border border-[#C8CDE0] text-[#243a85] text-[10px] tracking-[0.14em] uppercase py-1 px-3 rounded-full mb-4 font-medium"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] animate-pulse-dot" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#2458F5] animate-pulse-dot" />
           Red de envíos globales
         </motion.div>
         <motion.h2
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.15 }}
-          className="font-display text-[28px] md:text-[32px] font-extrabold tracking-tight text-center mb-2"
+          className="font-display text-[28px] md:text-[32px] font-extrabold tracking-tight text-center mb-2 text-[#1B2141]"
         >
-          Conectamos <span className="text-[#00C2FF]">Chile con el mundo</span>
+          Conectamos <span className="text-[#2458F5]">Chile con el mundo</span>
         </motion.h2>
         <motion.p
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.25 }}
-          className="text-[13px] text-white/45 text-center mb-8 max-w-[480px]"
+          className="text-[13px] text-[#5C6489] text-center mb-8 max-w-[480px]"
         >
           Envíos y cambios de divisas a más de 40 países. Ida y vuelta, rápido y seguro.
         </motion.p>
@@ -388,19 +493,21 @@ export function GlobeBidirectionalSection() {
             aria-hidden
           >
             <div className="relative w-[76px] h-[76px] flex items-center justify-center">
-              <div className="absolute w-[76px] h-[76px] rounded-full border border-[rgba(0,194,255,0.1)]" />
-              <div className="absolute w-[60px] h-[60px] rounded-full border border-[rgba(0,194,255,0.2)]" />
+              <div className="absolute w-[76px] h-[76px] rounded-full border border-[#2458F5]/10" />
+              <div className="absolute w-[60px] h-[60px] rounded-full border border-[#2458F5]/20" />
               <div
-                className="relative z-10 w-[46px] h-[46px] rounded-full flex flex-col items-center justify-center text-center border-2 border-[#00C2FF] animate-globe-hub-pulse"
+                className="relative z-10 w-[46px] h-[46px] rounded-full flex flex-col items-center justify-center text-center border-2 border-[#2458F5] animate-globe-hub-pulse"
                 style={{ background: 'linear-gradient(135deg, #1A3FBF, #2458F5)' }}
               >
                 <span className="text-xl leading-none">🇨🇱</span>
-                <span className="text-[7px] font-medium text-white/70 tracking-wider mt-0.5">CHL</span>
+                <span className="text-[7px] font-medium text-white/80 tracking-wider mt-0.5">
+                  CHL
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Flag pins — en móvil solo bandera + código para evitar solapamientos */}
+          {/* Flag pins */}
           {PINS.map((pin, i) => (
             <div
               key={pin.cur}
@@ -412,39 +519,71 @@ export function GlobeBidirectionalSection() {
             >
               <div
                 data-pill
-                className="bg-[#08122B]/95 border border-white/[0.18] rounded-[22px] py-1 sm:py-1.5 pl-1.5 sm:pl-2 pr-2 sm:pr-3 flex items-center gap-1 sm:gap-1.5"
+                className="bg-white/95 border border-[#E2E5F1] shadow-card rounded-[22px] py-1 sm:py-1.5 pl-1.5 sm:pl-2 pr-2 sm:pr-3 flex items-center gap-1 sm:gap-1.5"
               >
                 <span className="text-[13px] sm:text-[15px] leading-none">{pin.flag}</span>
-                <span className="text-[10px] sm:text-[11px] font-medium text-white hidden sm:inline">{pin.name}</span>
-                <span className="text-[9px] sm:text-[10px] text-[#00C2FF] font-mono">{pin.cur}</span>
+                <span className="text-[10px] sm:text-[11px] font-medium text-[#1B2141] hidden sm:inline">
+                  {pin.name}
+                </span>
+                <span className="text-[9px] sm:text-[10px] text-[#2458F5] font-mono">
+                  {pin.cur}
+                </span>
               </div>
               <div
                 data-stem
-                className="w-px min-h-[10px] bg-gradient-to-b from-[rgba(0,194,255,0.5)] to-transparent"
+                className="w-px min-h-[10px] bg-gradient-to-b from-[#2458F5]/40 to-transparent"
               />
-              <div className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] shadow-[0_0_8px_#00C2FF]" />
+              <div className="w-1.5 h-1.5 rounded-full bg-[#2458F5] shadow-[0_0_8px_rgba(36,88,245,0.5)]" />
             </div>
           ))}
         </motion.div>
 
-        {/* Stats — en móvil una columna para no forzar ancho */}
+        {/* Stats */}
         <motion.div
           {...fadeUp}
           transition={{ ...fadeUp.transition, delay: 0.4 }}
           className="flex flex-wrap gap-3 sm:gap-4 justify-center mt-6 w-full max-w-full px-0"
         >
           {[
-            { val: <><span className="text-[#00C2FF]">40</span>+</>, lbl: 'Países' },
-            { val: <><span className="text-[#00C2FF]">&lt;</span>24h</>, lbl: 'Entrega' },
-            { val: <>0<span className="text-[#00C2FF]">%</span></>, lbl: 'Comisión' },
-            { val: <><span className="text-[#00C2FF]">6</span></>, lbl: 'Divisas' },
+            {
+              val: (
+                <>
+                  <span className="text-[#2458F5]">40</span>+
+                </>
+              ),
+              lbl: 'Países',
+            },
+            {
+              val: (
+                <>
+                  <span className="text-[#2458F5]">&lt;</span>24h
+                </>
+              ),
+              lbl: 'Entrega',
+            },
+            {
+              val: (
+                <>
+                  0<span className="text-[#2458F5]">%</span>
+                </>
+              ),
+              lbl: 'Comisión',
+            },
+            {
+              val: (
+                <>
+                  <span className="text-[#2458F5]">6</span>
+                </>
+              ),
+              lbl: 'Divisas',
+            },
           ].map((stat) => (
             <div
               key={stat.lbl}
-              className="bg-[#0F1E45]/90 border border-white/[0.07] rounded-xl py-3 px-5 text-center min-w-[80px]"
+              className="bg-white border border-[#E2E5F1] shadow-card rounded-xl py-3 px-5 text-center min-w-[80px]"
             >
-              <div className="font-mono text-[20px] font-medium text-white">{stat.val}</div>
-              <div className="text-[10px] text-white/45 mt-0.5">{stat.lbl}</div>
+              <div className="font-mono text-[20px] font-medium text-[#1B2141]">{stat.val}</div>
+              <div className="text-[10px] text-[#5C6489] mt-0.5">{stat.lbl}</div>
             </div>
           ))}
         </motion.div>

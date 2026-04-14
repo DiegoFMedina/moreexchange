@@ -1,5 +1,5 @@
 /* PATH: apps/web/app/globals.css */
-/* DESC: Estilos globales — variables CSS de la paleta More Exchange, reset base y utilidades */
+/* DESC: Estilos globales — tema claro More Exchange, paleta del manual de marca MoreGiros 2024 */
 
 @tailwind base;
 @tailwind components;
@@ -7,25 +7,32 @@
 
 @layer base {
   :root {
-    --background: #06080f;
-    --surface: #0c0f1a;
-    --surface-card: #111629;
-    --surface-2: #162254;
-    --border: #1c2240;
-    --border-emphasis: #2a3460;
-    --text-primary: #eef0f8;
-    --text-secondary: #6b7499;
-    --accent: #00b4d8;
-    --accent-hover: #00d4ff;
-    --accent-glow: rgba(0, 180, 216, 0.12);
-    --cyan-dim: rgba(0, 194, 255, 0.1);
-    --cyan-border: rgba(0, 194, 255, 0.25);
-    --positive: #00c896;
-    --negative: #ff4d6a;
+    --background: #FFFFFF;
+    --background-alt: #F5F7FE;
+    --surface: #FFFFFF;
+    --surface-card: #FFFFFF;
+    --surface-muted: #F0F2FA;
+    --surface-2: #F5F7FE;
+    --border: #E2E5F1;
+    --border-emphasis: #C8CDE0;
+    --text-primary: #1B2141;
+    --text-secondary: #5C6489;
+    --text-muted: #8B92B0;
+    --brand: #243a85;
+    --brand-medium: #4b579b;
+    --brand-light: #8c8fc0;
+    --brand-pale: #E8EAF6;
+    --accent: #00AEEF;
+    --accent-hover: #0095D0;
+    --accent-glow: rgba(0, 174, 239, 0.10);
+    --cyan-dim: rgba(0, 174, 239, 0.08);
+    --cyan-border: rgba(0, 174, 239, 0.25);
+    --positive: #059669;
+    --negative: #DC2626;
     --blue-mid: #1a3a8f;
-    --blue-cta: #2458f5;
-    --blue-cta-hover: #1a3fbf;
-    --faint: rgba(255, 255, 255, 0.06);
+    --blue-cta: #2458F5;
+    --blue-cta-hover: #1A3FBF;
+    --faint: rgba(36, 58, 133, 0.06);
   }
 
   * {
@@ -38,7 +45,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    /* Impide scroll horizontal táctil (overscroll/rubber-band en Android/iOS) */
     overscroll-behavior-x: none;
     width: 100%;
   }
@@ -54,7 +60,6 @@
     position: relative;
   }
 
-  /* Números tabulares para cifras financieras */
   .tabular-nums,
   [data-rate],
   .rate-value {
@@ -80,54 +85,25 @@
     background-color: var(--surface-card);
   }
 
-  /* Animaciones moreexchange_landing_animada */
   @keyframes fadeUp {
-    from {
-      opacity: 0;
-      transform: translateY(28px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
   @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-6px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
   @keyframes pulse-dot {
-    0%,
-    100% {
-      opacity: 0.6;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.05);
-    }
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
   }
   @keyframes ping-dot {
-    0% {
-      opacity: 0.7;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(2.4);
-    }
+    0% { opacity: 0.7; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2.4); }
   }
   .animate-float {
     animation: float 4s ease-in-out infinite;
@@ -135,85 +111,38 @@
   .animate-pulse-dot {
     animation: pulse-dot 1.5s ease-in-out infinite;
   }
-  /* Dot grid decorativo — fondo hero */
+
   .dot-grid {
-    background-image: radial-gradient(circle, #ffffff 1px, transparent 1px);
+    background-image: radial-gradient(circle, #243a85 1px, transparent 1px);
     background-size: 28px 28px;
-    opacity: 0.04;
+    opacity: 0.03;
   }
 
-  /* Scroll personalizado */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--surface);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--border-emphasis);
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--accent);
-  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--background-alt); }
+  ::-webkit-scrollbar-thumb { background: var(--border-emphasis); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--brand-medium); }
 
-  /* Página /sucursales — list + map */
-  .suc-list-panel::-webkit-scrollbar {
-    width: 4px;
-  }
-  .suc-list-panel::-webkit-scrollbar-thumb {
-    background: var(--surface-2);
-    border-radius: 2px;
-  }
-  .suc-marker-suc:hover,
-  .suc-marker-tot:hover {
-    transform: scale(1.2);
-  }
+  .suc-list-panel::-webkit-scrollbar { width: 4px; }
+  .suc-list-panel::-webkit-scrollbar-thumb { background: var(--border-emphasis); border-radius: 2px; }
+  .suc-marker-suc:hover, .suc-marker-tot:hover { transform: scale(1.2); }
+
   @keyframes suc-map-ping {
-    0% {
-      opacity: 0.8;
-      transform: scale(1);
-    }
-    100% {
-      opacity: 0;
-      transform: scale(2.6);
-    }
+    0% { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2.6); }
   }
-  .suc-m-ring {
-    animation: suc-map-ping 2.5s ease-out infinite;
-  }
-  .suc-detail-bar {
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .suc-detail-bar.open {
-    transform: translateY(0);
-  }
+  .suc-m-ring { animation: suc-map-ping 2.5s ease-out infinite; }
+  .suc-detail-bar { transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1); }
+  .suc-detail-bar.open { transform: translateY(0); }
 
-  /* Globe bidireccional — hub pulse y pin float */
   @keyframes globe-hub-pulse {
-    0%,
-    100% {
-      box-shadow: 0 0 0 0 rgba(0, 194, 255, 0.4), 0 0 20px rgba(36, 88, 245, 0.6);
-    }
-    50% {
-      box-shadow: 0 0 0 14px rgba(0, 194, 255, 0), 0 0 32px rgba(36, 88, 245, 0.9);
-    }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(36,88,245,0.3), 0 0 20px rgba(36,88,245,0.4); }
+    50% { box-shadow: 0 0 0 14px rgba(36,88,245,0), 0 0 32px rgba(36,88,245,0.6); }
   }
   @keyframes globe-pin-float {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-6px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
-  .animate-globe-hub-pulse {
-    animation: globe-hub-pulse 2.5s ease-in-out infinite;
-  }
-  .animate-globe-pin-float {
-    animation: globe-pin-float 3.2s ease-in-out infinite;
-  }
+  .animate-globe-hub-pulse { animation: globe-hub-pulse 2.5s ease-in-out infinite; }
+  .animate-globe-pin-float { animation: globe-pin-float 3.2s ease-in-out infinite; }
 }

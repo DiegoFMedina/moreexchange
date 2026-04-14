@@ -1,6 +1,5 @@
 # PATH: .gitignore
 # DESC: Archivos excluidos del repositorio
-.gitignore
 # Env
 .env
 .env.local

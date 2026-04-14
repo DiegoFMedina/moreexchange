@@ -1,5 +1,5 @@
 // PATH: apps/web/components/landing/HeroTasasWidget.tsx
-// DESC: Widget "Tasas de hoy" para el hero — moreexchange_hero_tasas_widget.html, datos desde API
+// DESC: Widget "Tasas de hoy" para hero — tema claro, card con sombra, datos desde API
 
 'use client';
 
@@ -58,17 +58,18 @@ export function HeroTasasWidget() {
   }, []);
 
   return (
-    <div className="relative overflow-hidden rounded-[14px] border border-white/[0.09] bg-[#0F1E45] max-w-full w-full">
+    <div className="relative overflow-hidden rounded-xl border border-[#E2E5F1] bg-white shadow-widget max-w-full w-full">
+      {/* Top accent line */}
       <div
-        className="absolute top-0 left-0 right-0 h-0.5 z-10"
+        className="absolute top-0 left-0 right-0 h-[3px] z-10"
         style={{
-          background: 'linear-gradient(90deg, transparent, #2458F5, #00C2FF, transparent)',
+          background: 'linear-gradient(90deg, #243a85, #2458F5, #00AEEF)',
         }}
       />
       <div className="flex items-center justify-between gap-2 px-3 sm:px-4 pt-4 pb-3">
-        <span className="text-[13px] font-medium text-white truncate">Tasas de hoy</span>
-        <div className="flex items-center gap-1.5 text-[10px] text-[#00C2FF] uppercase tracking-wider shrink-0">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] animate-pulse-dot" />
+        <span className="text-[13px] font-medium text-[#1B2141] truncate">Tasas de hoy</span>
+        <div className="flex items-center gap-1.5 text-[10px] text-[#059669] uppercase tracking-wider shrink-0">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#059669] animate-pulse-dot" />
           En vivo
         </div>
       </div>
@@ -81,8 +82,8 @@ export function HeroTasasWidget() {
             onClick={() => setFilter(f)}
             className={`py-1.5 px-2.5 sm:px-3 rounded-full border text-[10px] sm:text-[11px] font-sans transition-all ${
               filter === f
-                ? 'bg-[rgba(36,88,245,0.2)] border-[rgba(36,88,245,0.5)] text-white'
-                : 'border-white/[0.07] bg-transparent text-white/45 hover:border-white/20 hover:text-white'
+                ? 'bg-[#2458F5]/10 border-[#2458F5]/30 text-[#2458F5] font-medium'
+                : 'border-[#E2E5F1] bg-transparent text-[#5C6489] hover:border-[#C8CDE0] hover:text-[#243a85]'
             }`}
           >
             {f === 'all' ? 'Todos' : f === 'rem' ? 'Remesas' : f.toUpperCase()}
@@ -92,46 +93,46 @@ export function HeroTasasWidget() {
 
       <div className="overflow-x-auto overflow-y-hidden -mx-1 px-1 pr-2">
         <div className="min-w-[260px]">
-          <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2 border-t border-white/[0.07] border-b border-white/[0.07]">
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium truncate">
+          <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2 border-t border-b border-[#E2E5F1] bg-[#F5F7FE]">
+            <div className="text-[9px] tracking-wider uppercase text-[#8B92B0] font-medium truncate">
               Par
             </div>
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">
+            <div className="text-[9px] tracking-wider uppercase text-[#8B92B0] font-medium text-right">
               Compra
             </div>
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">
+            <div className="text-[9px] tracking-wider uppercase text-[#8B92B0] font-medium text-right">
               Venta
             </div>
-            <div className="text-[9px] tracking-wider uppercase text-white/45 font-medium text-right">
+            <div className="text-[9px] tracking-wider uppercase text-[#8B92B0] font-medium text-right">
               %
             </div>
           </div>
 
           <div className="min-h-[120px]">
             {isLoading && (
-              <div className="py-8 text-center text-[12px] text-white/45">Cargando tasas...</div>
+              <div className="py-8 text-center text-[12px] text-[#8B92B0]">Cargando tasas...</div>
             )}
             {!isLoading && error && (
-              <div className="py-6 text-center text-[12px] text-white/60 space-y-2">
+              <div className="py-6 text-center text-[12px] text-[#5C6489] space-y-2">
                 <p>No se pudieron cargar las tasas.</p>
                 <p className="flex flex-wrap items-center justify-center gap-2">
                   <button
                     type="button"
                     onClick={() => refetch()}
                     disabled={isRefetching}
-                    className="text-[#00C2FF] hover:underline disabled:opacity-50"
+                    className="text-[#2458F5] hover:underline disabled:opacity-50"
                   >
                     {isRefetching ? 'Reintentando…' : 'Reintentar'}
                   </button>
-                  <span className="text-white/40">·</span>
-                  <Link href="/rates" className="text-[#00C2FF] hover:underline">
+                  <span className="text-[#C8CDE0]">·</span>
+                  <Link href="/rates" className="text-[#2458F5] hover:underline">
                     Ver tasas
                   </Link>
                 </p>
               </div>
             )}
             {!isLoading && !error && visible.length === 0 && (
-              <div className="py-8 text-center text-[12px] text-white/45">
+              <div className="py-8 text-center text-[12px] text-[#8B92B0]">
                 Sin tasas disponibles
               </div>
             )}
@@ -145,33 +146,31 @@ export function HeroTasasWidget() {
                   <Link
                     key={rate.id}
                     href="/exchange"
-                    className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2.5 border-b border-white/[0.07] last:border-b-0 items-center hover:bg-[rgba(36,88,245,0.07)] transition-colors"
+                    className="grid grid-cols-[minmax(0,1fr)_56px_56px_44px] sm:grid-cols-[minmax(0,1fr)_72px_72px_64px] gap-0 px-3 sm:px-4 py-2.5 border-b border-[#E2E5F1] last:border-b-0 items-center hover:bg-[#F5F7FE] transition-colors"
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <div className="relative flex w-[30px] h-[18px] shrink-0">
-                        <span className="absolute left-0 w-[18px] h-[18px] rounded-full flex items-center justify-center text-[11px] bg-[#162254] border border-white/[0.08]">
+                        <span className="absolute left-0 w-[18px] h-[18px] rounded-full flex items-center justify-center text-[11px] bg-[#F0F2FA] border border-[#E2E5F1]">
                           {rate.fromCurrency.flagEmoji}
                         </span>
-                        <span className="absolute left-[11px] top-[2px] w-[14px] h-[14px] rounded-full flex items-center justify-center text-[8px] bg-[#162254] border border-white/[0.08]">
+                        <span className="absolute left-[11px] top-[2px] w-[14px] h-[14px] rounded-full flex items-center justify-center text-[8px] bg-[#F0F2FA] border border-[#E2E5F1]">
                           {rate.toCurrency.flagEmoji}
                         </span>
                       </div>
-                      <span className="text-[12px] sm:text-[13px] font-medium text-white truncate">
+                      <span className="text-[12px] sm:text-[13px] font-medium text-[#1B2141] truncate">
                         {rate.fromCurrency.code}/{rate.toCurrency.code}
                       </span>
                     </div>
-                    <div className="font-mono text-[12px] sm:text-[13px] text-white text-right tabular-nums truncate">
+                    <div className="font-mono text-[12px] sm:text-[13px] text-[#1B2141] text-right tabular-nums truncate">
                       {fmtN(Number(rate.buyRate))}
                     </div>
-                    <div className="font-mono text-[12px] sm:text-[13px] font-medium text-white text-right tabular-nums truncate">
+                    <div className="font-mono text-[12px] sm:text-[13px] font-medium text-[#1B2141] text-right tabular-nums truncate">
                       {fmtN(Number(rate.sellRate))}
                     </div>
                     <div className="text-right">
                       <span
                         className={`inline-flex items-center gap-0.5 py-0.5 px-1.5 rounded-lg text-[10px] font-mono font-medium ${
-                          isDown
-                            ? 'bg-[rgba(255,92,92,0.1)] text-[#FF5C5C]'
-                            : 'bg-[rgba(0,229,160,0.1)] text-[#00E5A0]'
+                          isDown ? 'bg-red-50 text-[#DC2626]' : 'bg-emerald-50 text-[#059669]'
                         }`}
                       >
                         {isDown ? '▼' : '▲'}
@@ -185,9 +184,9 @@ export function HeroTasasWidget() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 border-t border-white/[0.07]">
+      <div className="flex items-center justify-between gap-2 px-3 sm:px-4 py-3 border-t border-[#E2E5F1] bg-[#FAFBFE]">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-white/45">
+          <span className="text-[10px] text-[#8B92B0]">
             {dataUpdatedAt
               ? new Date(dataUpdatedAt).toLocaleTimeString('es-CL', {
                   hour: '2-digit',
@@ -196,16 +195,16 @@ export function HeroTasasWidget() {
                 })
               : '—'}
           </span>
-          <div className="w-[50px] h-0.5 bg-white/[0.08] rounded overflow-hidden">
+          <div className="w-[50px] h-0.5 bg-[#E2E5F1] rounded overflow-hidden">
             <div
-              className="h-full bg-[#00C2FF] rounded transition-[width] duration-1000"
+              className="h-full bg-[#2458F5] rounded transition-[width] duration-1000"
               style={{ width: `${(countdown / 30) * 100}%` }}
             />
           </div>
         </div>
         <Link
           href="/rates"
-          className="bg-[#2458F5] text-white py-2 px-3.5 rounded-md text-[11px] font-medium hover:bg-[#1A3FBF] transition-colors whitespace-nowrap shrink-0"
+          className="bg-[#2458F5] text-white py-2 px-3.5 rounded-md text-[11px] font-medium hover:bg-[#1A3FBF] transition-colors whitespace-nowrap shrink-0 shadow-sm"
         >
           Ver todas →
         </Link>

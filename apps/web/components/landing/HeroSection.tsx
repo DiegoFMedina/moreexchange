@@ -1,5 +1,5 @@
 // PATH: apps/web/components/landing/HeroSection.tsx
-// DESC: Hero alineado a moreexchange_hero_brand_azul — grid, tag pill, h1 en 4 líneas, toggle, trust, card con línea gradiente, barra de stats
+// DESC: Hero claro con gradiente suave azul marca, grid texto+widget, trust badges, stats bar
 
 'use client';
 
@@ -27,7 +27,12 @@ const STATS = [
 
 function CheckIcon() {
   return (
-    <svg viewBox="0 0 8 8" className="w-2 h-2 shrink-0 stroke-[#00C2FF]" fill="none" strokeWidth="2.5">
+    <svg
+      viewBox="0 0 8 8"
+      className="w-2 h-2 shrink-0 stroke-[#059669]"
+      fill="none"
+      strokeWidth="2.5"
+    >
       <polyline points="1,4 3,6 7,2" />
     </svg>
   );
@@ -36,29 +41,28 @@ function CheckIcon() {
 export function HeroSection() {
   return (
     <div
-      className="font-sans text-white w-full min-w-0 [overflow-x:clip]"
+      className="font-sans w-full min-w-0 [overflow-x:clip]"
       style={{
         background:
-          'radial-gradient(ellipse 80% 55% at 62% 0%, rgba(36,88,245,0.2) 0%, transparent 60%), radial-gradient(ellipse 40% 35% at 8% 85%, rgba(0,194,255,0.08) 0%, transparent 55%), #0A1530',
+          'radial-gradient(ellipse 80% 55% at 62% 0%, rgba(36,58,133,0.06) 0%, transparent 60%), radial-gradient(ellipse 40% 35% at 8% 85%, rgba(0,174,239,0.04) 0%, transparent 55%), #FFFFFF',
       }}
     >
-      {/* Hero grid: texto izquierda | card derecha. overflow-x-hidden en el contenedor para evitar franja negra en móvil. */}
       <section className="relative w-full min-w-0">
-        <div className="absolute inset-0 z-0 dot-grid pointer-events-none opacity-[0.04]" aria-hidden />
-        {/* Toro: fondo que cubre hero + barra de stats y se extiende un poco hacia abajo para evitar corte brusco */}
+        <div className="absolute inset-0 z-0 dot-grid pointer-events-none" aria-hidden />
+        {/* Toro: fondo sutil */}
         <div
-          className="absolute top-0 left-0 right-0 z-0 select-none pointer-events-none"
-          style={{ bottom: '-120px' }}
+          className="absolute top-0 right-0 z-0 select-none pointer-events-none w-[55%] h-full"
+          style={{ bottom: '-60px' }}
           aria-hidden
         >
           <Image
             src="/toro.png"
             alt=""
             fill
-            className="object-cover object-right object-bottom"
-            sizes="100vw"
+            className="object-contain object-center"
+            sizes="50vw"
             priority={false}
-            style={{ opacity: 0.09 }}
+            style={{ opacity: 0.1 }}
           />
         </div>
 
@@ -66,66 +70,67 @@ export function HeroSection() {
           {/* Columna izquierda */}
           <div className="pr-0 lg:pr-10 pb-8 sm:pb-12 lg:pb-[52px]">
             <div className="max-w-xl min-w-0">
-              {/* Tag pill — d1 */}
+              {/* Tag pill */}
               <motion.div
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[0] }}
                 className="mb-6"
               >
-                <span className="inline-flex items-center gap-1.5 bg-[rgba(0,194,255,0.12)] border border-[rgba(0,194,255,0.3)] text-[#00C2FF] text-[10px] tracking-[0.14em] uppercase py-1.5 px-3 rounded-full font-medium">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#00C2FF] animate-pulse-dot" />
+                <span className="inline-flex items-center gap-1.5 bg-[#E8EAF6] border border-[#C8CDE0] text-[#243a85] text-[10px] tracking-[0.14em] uppercase py-1.5 px-3 rounded-full font-medium">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#2458F5] animate-pulse-dot" />
                   Tasas en tiempo real
                 </span>
               </motion.div>
 
-              {/* H1 — d2 (móvil más pequeño para que no desborde) */}
+              {/* H1 */}
               <motion.h1
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[1] }}
                 className="font-display text-[36px] sm:text-[44px] lg:text-[56px] font-extrabold leading-[1.02] tracking-[-0.025em] mb-2"
               >
-                <span className="text-white/20">Cambia divisas</span>
+                <span className="text-[#8c8fc0]">Cambia divisas</span>
                 <br />
-                <span className="text-[#00C2FF]">sin sorpresas.</span>
+                <span className="text-[#2458F5]">sin sorpresas.</span>
                 <br />
-                <span className="text-white/20">Envía dinero</span>
+                <span className="text-[#8c8fc0]">Envía dinero</span>
                 <br />
-                al mundo.
+                <span className="text-[#1B2141]">al mundo.</span>
               </motion.h1>
 
-              {/* Sub — d3 */}
+              {/* Sub */}
               <motion.p
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[2] }}
-                className="text-[14px] sm:text-[15px] leading-[1.7] text-white/45 max-w-[400px] mb-6 sm:mb-8 font-light"
+                className="text-[14px] sm:text-[15px] leading-[1.7] text-[#5C6489] max-w-[400px] mb-6 sm:mb-8 font-light"
               >
-                USD, EUR, GBP, BRL y más — directo a tu cuenta o a quien más quieres. Tasas competitivas, proceso en minutos.
+                USD, EUR, GBP, BRL y más — directo a tu cuenta o a quien más quieres. Tasas
+                competitivas, proceso en minutos.
               </motion.p>
 
-              {/* Toggle — d4 */}
+              {/* Toggle */}
               <motion.div
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[3] }}
                 className="mb-8"
               >
-                <div className="inline-flex rounded-lg bg-[#0F1E45] border border-[rgba(255,255,255,0.07)] p-1 gap-0 max-w-full">
-                  <span className="px-3 sm:px-5 py-2 rounded-md bg-[#2458F5] text-white text-[12px] sm:text-[13px] font-medium whitespace-nowrap">
+                <div className="inline-flex rounded-lg bg-[#F0F2FA] border border-[#E2E5F1] p-1 gap-0 max-w-full">
+                  <span className="px-3 sm:px-5 py-2 rounded-md bg-[#2458F5] text-white text-[12px] sm:text-[13px] font-medium whitespace-nowrap shadow-sm">
                     Cambio de divisas
                   </span>
                   <Link
                     href="/exchange"
-                    className="px-3 sm:px-5 py-2 rounded-md text-[12px] sm:text-[13px] text-white/45 hover:text-white transition-colors whitespace-nowrap"
+                    className="px-3 sm:px-5 py-2 rounded-md text-[12px] sm:text-[13px] text-[#5C6489] hover:text-[#243a85] transition-colors whitespace-nowrap"
                   >
                     Remesas
                   </Link>
                 </div>
               </motion.div>
 
-              {/* Trust row — d5 */}
+              {/* Trust row */}
               <motion.div
                 initial={{ opacity: 0, y: 28 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -133,8 +138,11 @@ export function HeroSection() {
                 className="flex flex-wrap gap-x-4 gap-y-3 sm:gap-5"
               >
                 {TRUST_ITEMS.map((label) => (
-                  <div key={label} className="flex items-center gap-1.5 text-[11px] sm:text-[12px] text-white/45">
-                    <span className="w-4 h-4 rounded-full border border-[rgba(36,88,245,0.35)] flex items-center justify-center shrink-0 text-[#00C2FF]">
+                  <div
+                    key={label}
+                    className="flex items-center gap-1.5 text-[11px] sm:text-[12px] text-[#5C6489]"
+                  >
+                    <span className="w-4 h-4 rounded-full border border-[#059669]/30 bg-[#059669]/10 flex items-center justify-center shrink-0">
                       <CheckIcon />
                     </span>
                     {label}
@@ -144,7 +152,7 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Widget Tasas de hoy — reveal d3 + float */}
+          {/* Widget Tasas de hoy */}
           <motion.div
             className="w-full min-w-0 lg:max-w-[360px]"
             initial={{ opacity: 0, y: 28 }}
@@ -157,23 +165,25 @@ export function HeroSection() {
           </motion.div>
         </div>
 
-        {/* Barra de stats — en móvil lista vertical (1 col); desde sm una fila horizontal */}
-        {/* Sin backdrop-blur: genera compositing layer que se extiende fuera del viewport en Android */}
-        <div className="relative z-10 border-t border-white/[0.07] grid grid-cols-1 sm:flex sm:flex-wrap lg:flex-nowrap py-3 sm:py-[22px] px-4 sm:px-6 lg:px-10 bg-[rgba(10,21,48,0.92)]">
+        {/* Barra de stats */}
+        <div className="relative z-10 border-t border-[#E2E5F1]/50 grid grid-cols-1 sm:flex sm:flex-wrap lg:flex-nowrap py-3 sm:py-[22px] px-4 sm:px-6 lg:px-10 bg-white/60 backdrop-blur-sm">
           {STATS.map((stat, i) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: staggerDelays[i] ?? 0.5 }}
-              className="flex-1 min-w-0 py-3 px-4 border-b border-white/[0.06] last:border-b-0 sm:border-b-0 sm:border-r sm:border-white/[0.06] sm:last:border-r-0 text-center"
+              transition={{
+                duration: 0.65,
+                ease: [0.22, 1, 0.36, 1],
+                delay: staggerDelays[i] ?? 0.5,
+              }}
+              className="flex-1 min-w-0 py-3 px-4 border-b border-[#E2E5F1] last:border-b-0 sm:border-b-0 sm:border-r sm:border-[#E2E5F1] sm:last:border-r-0 text-center"
             >
-              <p className="font-display text-[22px] sm:text-[26px] font-bold text-white mb-0.5 tabular-nums leading-tight">
-                {i === 0 && <span className="text-[#00C2FF]">+</span>}
-                {i === 2 && <span className="text-[12px] sm:text-[14px] font-normal text-white/45"> </span>}
+              <p className="font-display text-[22px] sm:text-[26px] font-bold text-[#1B2141] mb-0.5 tabular-nums leading-tight">
+                {i === 0 && <span className="text-[#2458F5]">+</span>}
                 {stat.value}
               </p>
-              <p className="text-[12px] sm:text-[12px] text-white/45">{stat.label}</p>
+              <p className="text-[12px] text-[#5C6489]">{stat.label}</p>
             </motion.div>
           ))}
         </div>

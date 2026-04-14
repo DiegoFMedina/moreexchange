@@ -1,5 +1,5 @@
 // PATH: apps/web/components/landing/HowItWorksSection.tsx
-// DESC: Sección "Cómo funciona" — estilo moreexchange_mid_footer: 3 pasos con círculo, conector, botones
+// DESC: Sección "Cómo funciona" — 3 pasos, tema claro, fondo blanco
 
 'use client';
 
@@ -13,7 +13,14 @@ const STEPS = [
     description:
       'Selecciona el par de monedas y el monto que deseas cambiar. La calculadora muestra el resultado en tiempo real.',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <circle cx="9" cy="9" r="3" />
         <path d="M9 2v2M9 14v2M2 9h2M14 9h2" />
       </svg>
@@ -25,7 +32,14 @@ const STEPS = [
     description:
       'Revisa el desglose: monto base, spread aplicado y monto final. Sin comisiones ocultas, sin letra chica.',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <path d="M4 9l4 4 6-7" />
       </svg>
     ),
@@ -36,7 +50,14 @@ const STEPS = [
     description:
       'Paga con tarjeta o transferencia. El cambio se acredita en tu cuenta en minutos. Sin esperas.',
     icon: (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <rect x="2" y="5" width="14" height="10" rx="2" />
         <path d="M2 9h14M6 13h2" />
       </svg>
@@ -46,14 +67,17 @@ const STEPS = [
 
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-[#08122B] overflow-x-hidden">
+    <section
+      id="how-it-works"
+      className="py-12 sm:py-[72px] px-4 sm:px-6 md:px-10 bg-white overflow-x-hidden"
+    >
       <div className="text-center flex flex-col items-center">
         <motion.span
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-          className="inline-flex items-center gap-2 bg-[rgba(0,194,255,0.1)] border border-[rgba(0,194,255,0.25)] text-[#00C2FF] text-[10px] tracking-[0.14em] uppercase py-1 px-3 rounded-full mb-4 font-medium"
+          className="inline-flex items-center gap-2 bg-[#E8EAF6] border border-[#C8CDE0] text-[#243a85] text-[10px] tracking-[0.14em] uppercase py-1 px-3 rounded-full mb-4 font-medium"
         >
           Cómo funciona
         </motion.span>
@@ -62,20 +86,20 @@ export function HowItWorksSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          className="font-display text-[28px] sm:text-[36px] font-extrabold tracking-tight text-white px-2"
+          className="font-display text-[28px] sm:text-[36px] font-extrabold tracking-tight text-[#1B2141] px-2"
         >
-          Tres pasos. <span className="text-[#00C2FF]">Sin complicaciones.</span>
+          Tres pasos. <span className="text-[#2458F5]">Sin complicaciones.</span>
         </motion.h2>
       </div>
 
       <div className="max-w-[900px] mx-auto mt-8 sm:mt-14 relative">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
           <div
-            className="hidden md:block absolute top-7 left-[calc(33.33%-1px)] w-1/3 h-px bg-[#2458F5]/40"
+            className="hidden md:block absolute top-7 left-[calc(33.33%-1px)] w-1/3 h-px bg-[#2458F5]/20"
             aria-hidden
           />
           <div
-            className="hidden md:block absolute top-7 left-[calc(66.66%-1px)] w-1/3 h-px bg-[#2458F5]/40"
+            className="hidden md:block absolute top-7 left-[calc(66.66%-1px)] w-1/3 h-px bg-[#2458F5]/20"
             aria-hidden
           />
 
@@ -85,19 +109,23 @@ export function HowItWorksSection() {
               initial={{ opacity: 0, y: 28 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.12 }}
-              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: [0.05, 0.15, 0.25][i] ?? 0.35 }}
+              transition={{
+                duration: 0.65,
+                ease: [0.22, 1, 0.36, 1],
+                delay: [0.05, 0.15, 0.25][i] ?? 0.35,
+              }}
               className={`relative py-6 sm:py-0 px-4 sm:px-6 md:px-8 group ${i === 0 ? 'md:pl-0' : ''} ${i === STEPS.length - 1 ? 'md:pr-0' : ''}`}
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#0F1E45] border border-[#2458F5] flex items-center justify-center mb-4 sm:mb-6 relative z-[1] text-[#00C2FF] transition-all duration-300 group-hover:scale-110 group-hover:border-[#00C2FF] group-hover:bg-[rgba(36,88,245,0.22)]">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#E8EAF6] border border-[#C8CDE0] flex items-center justify-center mb-4 sm:mb-6 relative z-[1] text-[#2458F5] transition-all duration-300 group-hover:scale-110 group-hover:border-[#2458F5] group-hover:bg-[#2458F5]/10">
                 {s.icon}
               </div>
-              <div className="font-mono text-[11px] tracking-wider text-white/60 mb-3">
+              <div className="font-mono text-[11px] tracking-wider text-[#8B92B0] mb-3">
                 {s.step}
               </div>
-              <h3 className="text-[15px] sm:text-[16px] font-medium text-white mb-2.5">
+              <h3 className="text-[15px] sm:text-[16px] font-medium text-[#1B2141] mb-2.5">
                 {s.title}
               </h3>
-              <p className="text-[12px] sm:text-[13px] text-white/60 leading-relaxed">
+              <p className="text-[12px] sm:text-[13px] text-[#5C6489] leading-relaxed">
                 {s.description}
               </p>
             </motion.div>
@@ -107,13 +135,13 @@ export function HowItWorksSection() {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-3 mt-8 sm:mt-12">
           <Link
             href="/exchange"
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-[#2458F5] text-white py-3.5 px-6 sm:px-8 rounded-lg text-[13px] sm:text-[14px] font-medium font-sans hover:bg-[#1A3FBF] transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center bg-[#2458F5] text-white py-3.5 px-6 sm:px-8 rounded-lg text-[13px] sm:text-[14px] font-medium font-sans hover:bg-[#1A3FBF] transition-colors shadow-sm"
           >
             Empezar ahora →
           </Link>
           <Link
             href="/sucursales"
-            className="w-full sm:w-auto inline-flex items-center justify-center bg-transparent border border-white/15 text-white/60 py-3.5 px-6 sm:px-8 rounded-lg text-[13px] sm:text-[14px] font-sans hover:text-white hover:border-white/25 transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center bg-transparent border border-[#E2E5F1] text-[#5C6489] py-3.5 px-6 sm:px-8 rounded-lg text-[13px] sm:text-[14px] font-sans hover:text-[#243a85] hover:border-[#C8CDE0] transition-colors"
           >
             Ver sucursales
           </Link>
